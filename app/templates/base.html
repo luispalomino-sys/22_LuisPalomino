@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Cooperativas Sais Capital Social{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+  <a class="brand" href="{{ url_for('main.inicio') }}">
+
+    <div class="logo-container">
+        <img
+            class="logo-img"
+            src="{{ url_for('static', filename='img/logo.png') }}"
+            alt="Cooperativas Sais"
+        >
+    </div>
+
+    <span class="brand-text">
+        Cooperativas Sais<br>
+        Capital Social
+    </span>
+
+  </a>
+
+    <nav class="main-nav">
+        <a href="{{ url_for('main.inicio') }}">Inicio</a>
+        <a href="{{ url_for('main.nosotros') }}">Nosotros</a>
+        <a href="{{ url_for('main.productos') }}">Productos</a>
+        <a href="{{ url_for('main.contactos') }}">Contactos</a>
+        <a href="{{ url_for('main.datos') }}">Datos</a>
+        <a href="{{ url_for('main.conoce_matahuasi') }}">Conoce<br>Matahuasi</a>
+
+    </nav>
+
+      <div class="header-icons">
+        <button aria-label="Buscar">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <button aria-label="Carrito">
+          <svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="21" r="1.4" fill="currentColor"/><circle cx="18" cy="21" r="1.4" fill="currentColor"/></svg>
+        </button>
+        <button aria-label="Cuenta">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <button class="nav-toggle" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>Cooperativa Agraria</p>
+    <p>Productores Agropecuarios</p>
+    <p>del Centro del Perú</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

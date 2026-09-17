@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Contactos · Cooperativa Agraria del Centro del Perú{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <h1>Contáctanos</h1>
+    <p>Escríbenos y un representante de la cooperativa se pondrá en contacto contigo.</p>
+</section>
+
+<section class="section-block">
+
+    {% if enviado %}
+    <p class="contact-success">
+        ¡Gracias, {{ nombre }}! Tu mensaje fue enviado correctamente. Te responderemos pronto.
+    </p>
+    {% endif %}
+
+    <div class="contact-layout">
+        <form class="contact-form" method="POST" action="{{ url_for('main.contactos') }}">
+            <label>
+                Nombre completo
+                <input type="text" name="nombre" placeholder="Escribe tu nombre completo" required>
+            </label>
+
+            <label>
+                Correo electrónico
+                <input type="email" name="correo" placeholder="tucorreo@ejemplo.com" required>
+            </label>
+
+            <label>
+                Asunto
+                <input type="text" name="asunto" placeholder="Motivo de tu mensaje" required>
+            </label>
+
+            <label>
+                Mensaje
+                <textarea name="mensaje" placeholder="Escribe tu mensaje" required></textarea>
+            </label>
+
+            <button type="submit" class="btn-primary" style="color: var(--verde-oscuro);">Enviar mensaje</button>
+        </form>
+
+        <aside class="contact-info">
+            <h3>Datos de contacto</h3>
+            <ul>
+                <li>📍 Matahuasi, Junín, Perú</li>
+                <li>✉️ contacto@cooperativamatahuasi.pe</li>
+                <li>📞 +51 964 000 000</li>
+                <li>🕒 Lunes a viernes, 8:00 am – 5:00 pm</li>
+            </ul>
+
+            <h3>Síguenos</h3>
+            <ul>
+                <li>Facebook · Cooperativa Matahuasi</li>
+                <li>Instagram · @coop.matahuasi</li>
+            </ul>
+        </aside>
+    </div>
+</section>
+
+{% endblock %}

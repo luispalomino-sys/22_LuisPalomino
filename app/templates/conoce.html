@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Conoce Matahuasi · Cooperativa Agraria del Centro del Perú{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <h1>Conoce Matahuasi</h1>
+    <p>Un recorrido por la tierra donde nacen nuestros productos, en el Valle
+       del Mantaro, Junín.</p>
+</section>
+
+<section class="section-block">
+    <h2 class="section-title">Nuestra tierra</h2>
+    <p class="section-subtitle">
+        Matahuasi es un distrito agrícola de la provincia de Concepción, Junín,
+        reconocido por sus extensos campos de cultivo y su paisaje andino.
+    </p>
+
+    <div class="cards-grid">
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/14.png') }}" alt="Vista panorámica de Matahuasi">
+            <div class="info-card-body">
+                <h3>El pueblo</h3>
+                <p>Ubicado en el Valle del Mantaro, rodeado de campos de cultivo
+                   y con una vista panorámica de los Andes centrales.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/22.jpg') }}" alt="Plaza principal de Matahuasi">
+            <div class="info-card-body">
+                <h3>Plaza principal</h3>
+                <p>Punto de encuentro de la comunidad, rodeada de casas
+                   tradicionales y comercios locales.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/18.jpg') }}" alt="Campos de cultivo de Matahuasi">
+            <div class="info-card-body">
+                <h3>Campos de cultivo</h3>
+                <p>Extensos terrenos de quinua y otros cultivos andinos que
+                   forman parte del paisaje diario de nuestros socios.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/16.jpeg') }}" alt="Cultivos de quinua roja">
+            <div class="info-card-body">
+                <h3>Tradición agrícola</h3>
+                <p>Generaciones de familias matahuasinas mantienen viva la
+                   tradición del cultivo de la quinua y la crianza del cuy.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
