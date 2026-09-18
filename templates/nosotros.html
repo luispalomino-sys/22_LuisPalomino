@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Nosotros · Cooperativa Agraria del Centro del Perú{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <h1>Nosotros</h1>
+    <p>Conoce la historia, misión, visión y valores de la Cooperativa Agraria
+       Productores Agropecuarios del Centro del Perú.</p>
+</section>
+
+<section class="section-block">
+    <h2 class="section-title">Quiénes somos</h2>
+    <p class="section-subtitle">
+        Somos una organización de productores agropecuarios de Matahuasi, Junín,
+        que trabaja de forma conjunta para mejorar la producción, comercialización
+        y calidad de vida de nuestras familias asociadas.
+    </p>
+
+    <div class="cards-grid">
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/7.jpg') }}" alt="Historia de la cooperativa">
+            <div class="info-card-body">
+                <h3>Historia</h3>
+                <p>Nacimos de la unión de familias productoras del Valle del Mantaro,
+                   con el objetivo de fortalecer el trabajo agropecuario a través del
+                   esfuerzo colectivo y el apoyo mutuo entre asociados.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/4.jpeg') }}" alt="Misión de la cooperativa">
+            <div class="info-card-body">
+                <h3>Misión</h3>
+                <p>Impulsar el desarrollo agropecuario sostenible de nuestros socios,
+                   ofreciendo productos de calidad como la quinua y el cuy, cuidando
+                   la tierra y generando bienestar para nuestras familias.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/1.jpeg') }}" alt="Visión de la cooperativa">
+            <div class="info-card-body">
+                <h3>Visión</h3>
+                <p>Ser una cooperativa referente en la región Junín, reconocida por
+                   la calidad de sus productos, su gestión responsable y su aporte
+                   al desarrollo del campo peruano.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <img src="{{ url_for('static', filename='img/19.jpg') }}" alt="Valores de la cooperativa">
+            <div class="info-card-body">
+                <h3>Valores</h3>
+                <p>Trabajo en equipo, honestidad, compromiso con la tierra, respeto
+                   por nuestras raíces y solidaridad entre todos los socios de la
+                   cooperativa.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
