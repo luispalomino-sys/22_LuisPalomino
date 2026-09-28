@@ -19,11 +19,17 @@
         content="Cooperativa Agraria Productores Agropecuarios del Centro del Perú"
     >
 
+    <!-- LIBRERÍA DE ANIMACIONES ANIMATE.CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/tailwind.css') }}"
     >
-        <link
+    <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/features.css') }}"
     >
@@ -45,6 +51,8 @@
             bg-[#063f35]/95
             backdrop-blur-md
             shadow-lg
+            animate__animated
+            animate__fadeInDown
         "
     >
 
@@ -68,7 +76,7 @@
                 "
             >
 
-                <!-- LOGO -->
+                <!-- LOGO CON ANIMACIÓN -->
                 <a
                     href="{{ url_for('main.inicio') }}"
                     class="
@@ -76,6 +84,8 @@
                         items-center
                         gap-3
                         shrink-0
+                        animate__animated
+                        animate__fadeInLeft
                     "
                 >
 
@@ -115,7 +125,7 @@
                 </a>
 
 
-                <!-- NAV DESKTOP -->
+                <!-- NAV DESKTOP CON ANIMACIÓN -->
 
                 <nav
                     class="
@@ -128,6 +138,8 @@
                         font-sans
                         text-xs
                         xl:text-sm
+                        animate__animated
+                        animate__fadeIn
                     "
                 >
 
@@ -204,14 +216,22 @@
                 </nav>
 
 
-                <!-- ICONOS -->
+                <!-- ICONOS CON ANIMACIÓN EN EL CARRITO -->
 
-                <div class="flex items-center gap-2">
+                <div
+                    class="
+                        flex
+                        items-center
+                        gap-2
+                        animate__animated
+                        animate__fadeInRight
+                    "
+                >
 
                     <!-- Buscar -->
-                   <button
-                    type="button"
-                    id="search-button"
+                    <button
+                        type="button"
+                        id="search-button"
                         class="
                             hidden
                             sm:flex
@@ -278,6 +298,7 @@
                             <circle cx="18" cy="20" r="1.25"/>
                         </svg>
 
+                        <!-- NOTIFICACIÓN DE CARRITO PULSANTE -->
                         <span
                             id="cart-count"
                             class="
@@ -295,6 +316,9 @@
                                 flex
                                 items-center
                                 justify-center
+                                animate__animated
+                                animate__pulse
+                                animate__infinite
                             "
                         >
                             0
@@ -644,7 +668,9 @@
     <script
         src="{{ url_for('static', filename='js/main.js') }}"
     ></script>
-    <script src="{{ url_for('static', filename='js/features.js') }}"
-    ></script
+    <script
+        src="{{ url_for('static', filename='js/features.js') }}"
+    ></script>
+
 </body>
 </html>
