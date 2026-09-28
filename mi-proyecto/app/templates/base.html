@@ -23,6 +23,10 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='css/tailwind.css') }}"
     >
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/features.css') }}"
+    >
 </head>
 
 <body class="min-h-screen bg-white text-[#163832]">
@@ -205,8 +209,9 @@
                 <div class="flex items-center gap-2">
 
                     <!-- Buscar -->
-                    <button
-                        type="button"
+                   <button
+                    type="button"
+                    id="search-button"
                         class="
                             hidden
                             sm:flex
@@ -639,6 +644,7 @@
     <script
         src="{{ url_for('static', filename='js/main.js') }}"
     ></script>
-
+    <script src="{{ url_for('static', filename='js/features.js') }}"
+    ></script
 </body>
 </html>
