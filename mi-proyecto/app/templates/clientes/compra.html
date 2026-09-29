@@ -1,0 +1,895 @@
+{% extends "base.html" %}
+
+{% block title %}
+Compra · Cooperativas Sais Capital Social
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ========================================================= -->
+<!-- HERO -->
+<!-- ========================================================= -->
+
+<section class="relative h-[280px] md:h-[340px] overflow-hidden">
+
+    <img
+        src="{{ url_for('static', filename='img/1.jpeg') }}"
+        alt="Productos"
+        class="
+            absolute
+            inset-0
+            w-full
+            h-full
+            object-cover
+        "
+    >
+
+    <div
+        class="
+            absolute
+            inset-0
+            bg-black/45
+        "
+    ></div>
+
+
+    <div
+        class="
+            relative
+            z-10
+            h-full
+            max-w-7xl
+            mx-auto
+            px-6
+            md:px-10
+            flex
+            flex-col
+            justify-center
+            text-white
+        "
+    >
+
+        <h1
+            class="
+                font-serif
+                text-4xl
+                md:text-5xl
+            "
+        >
+            Compra
+        </h1>
+
+        <p class="mt-3 text-white/80">
+            Realiza tu pedido de manera sencilla.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- PROCESO -->
+<!-- ========================================================= -->
+
+<section class="py-10 md:py-14 bg-[#f8faf8]">
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8">
+
+
+        <!-- INDICADORES -->
+
+        <div
+            class="
+                flex
+                items-center
+                justify-center
+                mb-10
+            "
+        >
+
+            <div class="purchase-step-indicator active" data-step="1">
+                <span>1</span>
+                <small>Productos</small>
+            </div>
+
+            <div class="w-10 sm:w-20 h-1 bg-[#dce8e3]"></div>
+
+            <div class="purchase-step-indicator" data-step="2">
+                <span>2</span>
+                <small>Envío</small>
+            </div>
+
+            <div class="w-10 sm:w-20 h-1 bg-[#dce8e3]"></div>
+
+            <div class="purchase-step-indicator" data-step="3">
+                <span>3</span>
+                <small>Confirmar</small>
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PASO 1 -->
+        <!-- ================================================= -->
+
+        <div id="purchase-step-1">
+
+            <div
+                class="
+                    bg-white
+                    rounded-2xl
+                    shadow-sm
+                    border
+                    border-[#e5ece8]
+                    overflow-hidden
+                "
+            >
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full min-w-[700px]">
+
+                        <thead
+                            class="
+                                bg-[#f1f5f2]
+                                text-[#49665f]
+                                text-sm
+                            "
+                        >
+
+                            <tr>
+
+                                <th class="text-left px-5 py-4">
+                                    Producto
+                                </th>
+
+                                <th class="px-5 py-4">
+                                    Precio
+                                </th>
+
+                                <th class="px-5 py-4">
+                                    Cantidad
+                                </th>
+
+                                <th class="px-5 py-4 text-right">
+                                    Subtotal
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody
+                            id="cart-products"
+                            class="divide-y divide-gray-100"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- TOTALES -->
+
+                <div class="p-6 md:p-8">
+
+                    <div
+                        class="
+                            max-w-sm
+                            ml-auto
+                            space-y-3
+                        "
+                    >
+
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <strong id="cart-subtotal">
+                                S/ 0.00
+                            </strong>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span>Envío</span>
+                            <strong id="cart-shipping">
+                                S/ 0.00
+                            </strong>
+                        </div>
+
+                        <div
+                            class="
+                                border-t
+                                pt-3
+                                flex
+                                justify-between
+                                text-lg
+                            "
+                        >
+                            <span class="font-semibold">
+                                TOTAL
+                            </span>
+
+                            <strong
+                                id="cart-total"
+                                class="text-[#17624f]"
+                            >
+                                S/ 0.00
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            mt-7
+                            flex
+                            flex-col
+                            sm:flex-row
+                            justify-between
+                            gap-3
+                        "
+                    >
+
+                        <a
+                            href="{{ url_for('main.productos') }}"
+                            class="
+                                border
+                                border-[#397d6c]
+                                text-[#397d6c]
+                                px-5
+                                py-3
+                                rounded-lg
+                                text-center
+                                font-semibold
+                            "
+                        >
+                            + Agregar productos
+                        </a>
+
+                        <button
+                            type="button"
+                            id="go-step-2"
+                            class="
+                                bg-[#17624f]
+                                text-white
+                                px-7
+                                py-3
+                                rounded-lg
+                                font-semibold
+                                hover:bg-[#104b3d]
+                                transition
+                            "
+                        >
+                            Continuar con el envío →
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PASO 2 -->
+        <!-- ================================================= -->
+
+        <div
+            id="purchase-step-2"
+            class="hidden"
+        >
+
+            <div
+                class="
+                    bg-white
+                    rounded-2xl
+                    shadow-sm
+                    border
+                    border-[#e5ece8]
+                    p-6
+                    md:p-8
+                "
+            >
+
+                <h2
+                    class="
+                        font-serif
+                        text-3xl
+                        md:text-4xl
+                        text-[#165449]
+                        mb-2
+                    "
+                >
+                    Información de envío
+                </h2>
+
+                <p class="text-sm text-[#6b7e78] mb-8">
+                    Completa tus datos para preparar el pedido.
+                </p>
+
+
+                <form
+                    id="shipping-form"
+                    class="grid md:grid-cols-2 gap-5"
+                >
+
+                    <div class="md:col-span-2">
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Nombre completo *
+                        </label>
+
+                        <input
+                            id="buyer-name"
+                            type="text"
+                            required
+                            class="form-input"
+                            placeholder="Nombre completo"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Correo electrónico *
+                        </label>
+
+                        <input
+                            id="buyer-email"
+                            type="email"
+                            required
+                            class="form-input"
+                            placeholder="correo@ejemplo.com"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Teléfono *
+                        </label>
+
+                        <input
+                            id="buyer-phone"
+                            type="tel"
+                            required
+                            class="form-input"
+                            placeholder="999 999 999"
+                        >
+
+                    </div>
+
+
+                    <div class="md:col-span-2">
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Dirección *
+                        </label>
+
+                        <input
+                            id="buyer-address"
+                            type="text"
+                            required
+                            class="form-input"
+                            placeholder="Dirección de entrega"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Distrito *
+                        </label>
+
+                        <input
+                            id="buyer-district"
+                            type="text"
+                            required
+                            class="form-input"
+                            placeholder="Distrito"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Ciudad / Provincia *
+                        </label>
+
+                        <input
+                            id="buyer-city"
+                            type="text"
+                            required
+                            class="form-input"
+                            placeholder="Ciudad"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Departamento *
+                        </label>
+
+                        <select
+                            id="buyer-region"
+                            required
+                            class="form-input"
+                        >
+
+                            <option value="">
+                                Selecciona
+                            </option>
+
+                            <option>
+                                Junín
+                            </option>
+
+                            <option>
+                                Lima
+                            </option>
+
+                            <option>
+                                Huancavelica
+                            </option>
+
+                            <option>
+                                Ayacucho
+                            </option>
+
+                            <option>
+                                Pasco
+                            </option>
+
+                            <option>
+                                Otro
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Método de entrega *
+                        </label>
+
+                        <select
+                            id="delivery-method"
+                            required
+                            class="form-input"
+                        >
+
+                            <option value="">
+                                Selecciona
+                            </option>
+
+                            <option value="delivery">
+                                Envío a domicilio
+                            </option>
+
+                            <option value="pickup">
+                                Recojo
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="md:col-span-2">
+
+                        <label class="block text-sm font-semibold mb-2">
+                            Comentario
+                        </label>
+
+                        <textarea
+                            id="buyer-comment"
+                            rows="4"
+                            class="form-input resize-none"
+                            placeholder="Información adicional..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            md:col-span-2
+                            flex
+                            flex-col
+                            sm:flex-row
+                            justify-between
+                            gap-3
+                            mt-3
+                        "
+                    >
+
+                        <button
+                            type="button"
+                            id="back-step-1"
+                            class="
+                                border
+                                border-[#397d6c]
+                                text-[#397d6c]
+                                px-6
+                                py-3
+                                rounded-lg
+                                font-semibold
+                            "
+                        >
+                            ← Volver
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="
+                                bg-[#17624f]
+                                text-white
+                                px-7
+                                py-3
+                                rounded-lg
+                                font-semibold
+                            "
+                        >
+                            Continuar →
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PASO 3 -->
+        <!-- ================================================= -->
+
+        <div
+            id="purchase-step-3"
+            class="hidden"
+        >
+
+            <div
+                class="
+                    grid
+                    lg:grid-cols-[1fr_360px]
+                    gap-6
+                "
+            >
+
+                <!-- RESUMEN -->
+
+                <div
+                    class="
+                        bg-white
+                        rounded-2xl
+                        shadow-sm
+                        border
+                        border-[#e5ece8]
+                        p-6
+                        md:p-8
+                    "
+                >
+
+                    <h2
+                        class="
+                            font-serif
+                            text-3xl
+                            text-[#165449]
+                            mb-6
+                        "
+                    >
+                        Resumen del pedido
+                    </h2>
+
+
+                    <div
+                        id="final-products"
+                        class="divide-y divide-gray-100"
+                    ></div>
+
+
+                    <div class="mt-6 space-y-3">
+
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <strong id="final-subtotal">
+                                S/ 0.00
+                            </strong>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span>Envío</span>
+                            <strong id="final-shipping">
+                                S/ 0.00
+                            </strong>
+                        </div>
+
+                        <div
+                            class="
+                                border-t
+                                pt-4
+                                flex
+                                justify-between
+                                text-xl
+                            "
+                        >
+
+                            <span class="font-bold">
+                                Total
+                            </span>
+
+                            <strong
+                                id="final-total"
+                                class="text-[#17624f]"
+                            >
+                                S/ 0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAGO -->
+
+                <div
+                    class="
+                        bg-white
+                        rounded-2xl
+                        shadow-sm
+                        border
+                        border-[#e5ece8]
+                        p-6
+                        md:p-8
+                        h-fit
+                    "
+                >
+
+                    <h2
+                        class="
+                            font-serif
+                            text-2xl
+                            text-[#165449]
+                            mb-5
+                        "
+                    >
+                        Método de pago
+                    </h2>
+
+
+                    <div class="space-y-3">
+
+                        <label
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                border
+                                border-[#dce8e3]
+                                rounded-lg
+                                p-4
+                                cursor-pointer
+                            "
+                        >
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="transferencia"
+                                checked
+                            >
+
+                            <span>
+                                Transferencia bancaria
+                            </span>
+
+                        </label>
+
+
+                        <label
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                border
+                                border-[#dce8e3]
+                                rounded-lg
+                                p-4
+                                cursor-pointer
+                            "
+                        >
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="yape"
+                            >
+
+                            <span>
+                                Yape / Plin
+                            </span>
+
+                        </label>
+
+
+                        <label
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                border
+                                border-[#dce8e3]
+                                rounded-lg
+                                p-4
+                                cursor-pointer
+                            "
+                        >
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="contra-entrega"
+                            >
+
+                            <span>
+                                Pago contra entrega
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="confirm-order"
+                        class="
+                            w-full
+                            mt-7
+                            bg-[#17624f]
+                            text-white
+                            py-3
+                            rounded-lg
+                            font-semibold
+                            hover:bg-[#104b3d]
+                            transition
+                        "
+                    >
+                        Confirmar pedido
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="back-step-2"
+                        class="
+                            w-full
+                            mt-3
+                            text-[#397d6c]
+                            text-sm
+                            font-semibold
+                        "
+                    >
+                        ← Volver a datos de envío
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ÉXITO -->
+        <!-- ================================================= -->
+
+        <div
+            id="purchase-success"
+            class="hidden"
+        >
+
+            <div
+                class="
+                    max-w-2xl
+                    mx-auto
+                    bg-white
+                    rounded-2xl
+                    shadow-sm
+                    border
+                    border-[#e5ece8]
+                    text-center
+                    p-8
+                    md:p-12
+                "
+            >
+
+                <div
+                    class="
+                        w-20
+                        h-20
+                        rounded-full
+                        bg-[#dff2dc]
+                        text-[#397d6c]
+                        flex
+                        items-center
+                        justify-center
+                        text-4xl
+                        mx-auto
+                        mb-6
+                    "
+                >
+                    ✓
+                </div>
+
+
+                <h2
+                    class="
+                        font-serif
+                        text-4xl
+                        text-[#165449]
+                        mb-4
+                    "
+                >
+                    ¡Pedido confirmado!
+                </h2>
+
+
+                <p
+                    id="order-message"
+                    class="
+                        text-[#60766f]
+                        leading-relaxed
+                        mb-8
+                    "
+                ></p>
+
+
+                <a
+                    href="{{ url_for('main.inicio') }}"
+                    class="
+                        inline-flex
+                        bg-[#17624f]
+                        text-white
+                        px-7
+                        py-3
+                        rounded-full
+                        font-semibold
+                    "
+                >
+                    Volver al inicio
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

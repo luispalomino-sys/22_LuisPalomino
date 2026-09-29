@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block title %}
+Productos · Cooperativas Sais Capital Social
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ========================================================= -->
+<!-- HERO -->
+<!-- ========================================================= -->
+
+<section class="relative h-[330px] md:h-[400px] overflow-hidden">
+
+    <img
+        src="{{ url_for('static', filename='img/13.jpg') }}"
+        alt="Cuy"
+        class="
+            absolute
+            inset-0
+            w-full
+            h-full
+            object-cover
+            scale-x-[-1]
+        "
+    >
+
+    <div class="absolute inset-0 bg-black/45"></div>
+
+
+    <div
+        class="
+            relative
+            z-10
+            h-full
+            max-w-7xl
+            mx-auto
+            px-6
+            md:px-10
+            flex
+            flex-col
+            justify-center
+            text-white
+        "
+    >
+
+        <h1
+            class="
+                font-serif
+                text-4xl
+                md:text-6xl
+                mb-4
+            "
+        >
+            Nuestros productos
+        </h1>
+
+        <p class="text-sm md:text-base text-white/80">
+            Inicio
+            <span class="mx-2">›</span>
+            Productos
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- PRODUCTOS -->
+<!-- ========================================================= -->
+
+<section class="py-16 md:py-20 bg-white">
+
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+
+        <!-- CUY -->
+
+        <article
+            id="cuy"
+            class="
+                grid
+                md:grid-cols-[1fr_300px]
+                gap-10
+                items-center
+                py-8
+                border-b
+                border-gray-100
+            "
+        >
+
+            <div>
+
+                <div class="flex items-center gap-3 mb-4">
+
+                    <span class="text-3xl">
+                        🐹
+                    </span>
+
+                    <h2
+                        class="
+                            font-serif
+                            text-4xl
+                            text-[#165449]
+                        "
+                    >
+                        Cuy
+                    </h2>
+
+                </div>
+
+                <p
+                    class="
+                        text-[#49665f]
+                        leading-relaxed
+                        mb-6
+                    "
+                >
+                    Criamos y comercializamos cuyes de alta calidad,
+                    cuidando cada etapa del proceso para garantizar
+                    un producto saludable y nutritivo.
+                </p>
+
+
+                <div class="flex flex-wrap gap-3">
+
+                    <a
+                        href="https://es.wikipedia.org/wiki/Cavia_porcellus"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="
+                            inline-flex
+                            bg-[#71c96a]
+                            text-white
+                            px-5
+                            py-2
+                            rounded-full
+                            text-sm
+                            font-semibold
+                            hover:bg-[#5db656]
+                            transition
+                        "
+                    >
+                        Conoce más
+                    </a>
+
+                    <button
+                        type="button"
+                        data-add-product="cuy"
+                        class="
+                            inline-flex
+                            border
+                            border-[#397d6c]
+                            text-[#397d6c]
+                            px-5
+                            py-2
+                            rounded-full
+                            text-sm
+                            font-semibold
+                            hover:bg-[#397d6c]
+                            hover:text-white
+                            transition
+                        "
+                    >
+                        Agregar al carrito
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    h-[250px]
+                    rounded-[30px]
+                    overflow-hidden
+                    shadow-md
+                "
+            >
+
+                <img
+                    src="{{ url_for('static', filename='img/17.jpg') }}"
+                    alt="Cuy"
+                    class="
+                        w-full
+                        h-full
+                        object-cover
+                    "
+                >
+
+            </div>
+
+        </article>
+
+
+        <!-- QUINUA -->
+
+        <article
+            class="
+                grid
+                md:grid-cols-[1fr_300px]
+                gap-10
+                items-center
+                py-10
+            "
+        >
+
+            <div>
+
+                <div class="flex items-center gap-3 mb-4">
+
+                    <span class="text-3xl">
+                        🌿
+                    </span>
+
+                    <h2
+                        class="
+                            font-serif
+                            text-4xl
+                            text-[#165449]
+                        "
+                    >
+                        Quinua
+                    </h2>
+
+                </div>
+
+                <p
+                    class="
+                        text-[#49665f]
+                        leading-relaxed
+                        mb-6
+                    "
+                >
+                    Cultivamos quinua, un superalimento con alto valor
+                    nutritivo tradicional, ideal para una alimentación
+                    saludable y sostenible.
+                </p>
+
+
+                <div class="flex flex-wrap gap-3">
+
+                    <a
+                        href="https://es.wikipedia.org/wiki/Chenopodium_quinoa"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="
+                            inline-flex
+                            bg-[#71c96a]
+                            text-white
+                            px-5
+                            py-2
+                            rounded-full
+                            text-sm
+                            font-semibold
+                            hover:bg-[#5db656]
+                            transition
+                        "
+                    >
+                        Conoce más
+                    </a>
+
+                    <button
+                        type="button"
+                        data-add-product="quinua"
+                        class="
+                            inline-flex
+                            border
+                            border-[#397d6c]
+                            text-[#397d6c]
+                            px-5
+                            py-2
+                            rounded-full
+                            text-sm
+                            font-semibold
+                            hover:bg-[#397d6c]
+                            hover:text-white
+                            transition
+                        "
+                    >
+                        Agregar al carrito
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    h-[250px]
+                    rounded-[30px]
+                    overflow-hidden
+                    shadow-md
+                "
+            >
+
+                <img
+                    src="{{ url_for('static', filename='img/18.jpg') }}"
+                    alt="Quinua"
+                    class="
+                        w-full
+                        h-full
+                        object-cover
+                    "
+                >
+
+            </div>
+
+        </article>
+
+
+        <!-- CARDS -->
+
+        <div
+            class="
+                grid
+                md:grid-cols-3
+                gap-5
+                mt-10
+            "
+        >
+
+            <div
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-7
+                    text-center
+                "
+            >
+                <div class="text-4xl mb-4">
+                    🏅
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Calidad
+                </h3>
+
+            </div>
+
+
+            <div
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-7
+                    text-center
+                "
+            >
+                <div class="text-4xl mb-4">
+                    ⚙️
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Producción responsable
+                </h3>
+
+            </div>
+
+
+            <div
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-7
+                    text-center
+                "
+            >
+                <div class="text-4xl mb-4">
+                    🤲
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Apoyo a nuestros socios
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

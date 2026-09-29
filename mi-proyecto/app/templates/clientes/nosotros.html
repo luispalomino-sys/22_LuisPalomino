@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}
+Nosotros · Cooperativas Sais Capital Social
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ========================================================= -->
+<!-- HERO -->
+<!-- ========================================================= -->
+
+<section class="relative h-[330px] md:h-[390px] overflow-hidden">
+
+    <img
+        src="{{ url_for('static', filename='img/12.jpg') }}"
+        alt="Campos de quinua"
+        class="
+            absolute
+            inset-0
+            w-full
+            h-full
+            object-cover
+        "
+    >
+
+    <div
+        class="
+            absolute
+            inset-0
+            bg-black/40
+        "
+    ></div>
+
+
+    <div
+        class="
+            relative
+            z-10
+            h-full
+            max-w-7xl
+            mx-auto
+            px-6
+            md:px-10
+            flex
+            flex-col
+            justify-center
+            text-white
+        "
+    >
+
+        <h1
+            class="
+                font-serif
+                text-4xl
+                md:text-6xl
+                mb-4
+            "
+        >
+            Sobre nosotros
+        </h1>
+
+        <p class="text-sm md:text-base text-white/80">
+            Inicio
+            <span class="mx-2">›</span>
+            Nosotros
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- HISTORIA -->
+<!-- ========================================================= -->
+
+<section class="bg-white py-16 md:py-20">
+
+    <div
+        class="
+            max-w-6xl
+            mx-auto
+            px-6
+            md:px-10
+        "
+    >
+
+        <div
+            class="
+                grid
+                md:grid-cols-[1fr_340px]
+                gap-10
+                md:gap-16
+                items-center
+            "
+        >
+
+            <div>
+
+                <h2
+                    class="
+                        font-serif
+                        text-4xl
+                        md:text-5xl
+                        text-[#165449]
+                        mb-6
+                    "
+                >
+                    Nuestra historia
+                </h2>
+
+                <p
+                    class="
+                        text-[#49665f]
+                        leading-relaxed
+                        text-base
+                        md:text-lg
+                    "
+                >
+                    Somos una cooperativa agraria formada por productores
+                    del Centro del Perú, que nace con el objetivo de mejorar
+                    la producción, comercialización y calidad de nuestros
+                    productos, trabajando de manera organizada y sostenible.
+                </p>
+
+            </div>
+
+
+            <div
+                class="
+                    rounded-[30px]
+                    overflow-hidden
+                    shadow-lg
+                    h-[240px]
+                "
+            >
+
+                <img
+                    src="{{ url_for('static', filename='img/19.jpg') }}"
+                    alt="Productores trabajando"
+                    class="
+                        w-full
+                        h-full
+                        object-cover
+                    "
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- MISIÓN / VISIÓN -->
+<!-- ========================================================= -->
+
+<section class="bg-[#f8faf8] py-14">
+
+    <div
+        class="
+            max-w-6xl
+            mx-auto
+            px-6
+            md:px-10
+            grid
+            md:grid-cols-2
+            gap-12
+        "
+    >
+
+        <!-- MISION -->
+
+        <article>
+
+            <div class="flex items-center gap-4 mb-5">
+
+                <div
+                    class="
+                        w-12
+                        h-12
+                        rounded-full
+                        bg-white
+                        shadow-sm
+                        flex
+                        items-center
+                        justify-center
+                        text-2xl
+                    "
+                >
+                    🎯
+                </div>
+
+                <h2
+                    class="
+                        font-serif
+                        text-3xl
+                        md:text-4xl
+                        text-[#165449]
+                    "
+                >
+                    Misión
+                </h2>
+
+            </div>
+
+            <p class="text-[#49665f] leading-relaxed">
+
+                Impulsar el desarrollo de nuestros socios a través
+                de una producción agropecuaria sostenible y de calidad,
+                fortaleciendo el trabajo organizado y el crecimiento
+                de nuestras comunidades.
+
+            </p>
+
+        </article>
+
+
+        <!-- VISION -->
+
+        <article>
+
+            <div class="flex items-center gap-4 mb-5">
+
+                <div
+                    class="
+                        w-12
+                        h-12
+                        rounded-full
+                        bg-white
+                        shadow-sm
+                        flex
+                        items-center
+                        justify-center
+                        text-2xl
+                    "
+                >
+                    🌱
+                </div>
+
+                <h2
+                    class="
+                        font-serif
+                        text-3xl
+                        md:text-4xl
+                        text-[#165449]
+                    "
+                >
+                    Visión
+                </h2>
+
+            </div>
+
+            <p class="text-[#49665f] leading-relaxed">
+
+                Ser una cooperativa reconocida por la calidad de
+                nuestros productos y por el impacto positivo en
+                nuestras comunidades.
+
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- VALORES -->
+<!-- ========================================================= -->
+
+<section class="py-16 md:py-20 bg-white">
+
+    <div
+        class="
+            max-w-6xl
+            mx-auto
+            px-6
+            md:px-10
+        "
+    >
+
+        <h2
+            class="
+                font-serif
+                text-4xl
+                md:text-5xl
+                text-[#165449]
+                mb-10
+            "
+        >
+            Nuestros valores
+        </h2>
+
+
+        <div
+            class="
+                grid
+                grid-cols-2
+                md:grid-cols-4
+                gap-4
+                md:gap-6
+            "
+        >
+
+            <article
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-6
+                    text-center
+                    hover:-translate-y-1
+                    transition
+                "
+            >
+
+                <div class="text-3xl mb-4">
+                    👥
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Trabajo en equipo
+                </h3>
+
+            </article>
+
+
+            <article
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-6
+                    text-center
+                    hover:-translate-y-1
+                    transition
+                "
+            >
+
+                <div class="text-3xl mb-4">
+                    🤝
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Compromiso
+                </h3>
+
+            </article>
+
+
+            <article
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-6
+                    text-center
+                    hover:-translate-y-1
+                    transition
+                "
+            >
+
+                <div class="text-3xl mb-4">
+                    🌿
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Sostenibilidad
+                </h3>
+
+            </article>
+
+
+            <article
+                class="
+                    bg-[#f6f7f6]
+                    rounded-xl
+                    p-6
+                    text-center
+                    hover:-translate-y-1
+                    transition
+                "
+            >
+
+                <div class="text-3xl mb-4">
+                    ★
+                </div>
+
+                <h3 class="font-semibold text-[#165449]">
+                    Calidad
+                </h3>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
