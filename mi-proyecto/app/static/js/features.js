@@ -6,6 +6,8 @@
    4. Validacion de formularios en tiempo real
    5. Barra de progreso + boton "volver arriba"
    6. Animacion de aparicion al hacer scroll
+   7. Favoritos con corazon + avisos (toast)
+   8. Control de tamano de texto (accesibilidad)
    ========================================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -349,4 +351,120 @@ document.addEventListener("DOMContentLoaded", () => {
         }, { threshold: 0.12 });
         targets.forEach((t) => { t.classList.add("rv"); io.observe(t); });
     }
+
+
+    /* ---------------- AVISO FLOTANTE (toast) - lo usa la funcion 7 ---------------- */
+    const toastBox = document.createElement("div");
+    toastBox.id = "sf-toast";
+    toastBox.setAttribute("role", "status");
+    toastBox.setAttribute("aria-live", "polite");
+    document.body.appendChild(toastBox);
+    let toastTimer;
+
+    function showToast(text) {
+        toastBox.textContent = text;
+        toastBox.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastBox.classList.remove("show"), 2200);
+    }
+
+
+    /* ---------------- 7. FAVORITOS CON CORAZON ---------------- */
+    // Cada producto (article.product-item) recibe un boton de corazon.
+    // Los favoritos se guardan en localStorage y se sincronizan entre pestanas.
+    const FAV_KEY = "sais_favs";
+    const readFavs = () => {
+        try {
+            const f = JSON.parse(localStorage.getItem(FAV_KEY));
+            return Array.isArray(f) ? f : [];
+        } catch (e) { return []; }
+    };
+    const writeFavs = (list) => localStorage.setItem(FAV_KEY, JSON.stringify(list));
+
+    const favProducts = document.querySelectorAll("article.product-item[id]");
+
+    function paintHeart(btn, on) {
+        btn.classList.toggle("on", on);
+        btn.setAttribute("aria-pressed", String(on));
+        btn.textContent = on ? "♥" : "♡";
+    }
+
+    favProducts.forEach((article) => {
+        const holder = article.querySelector(".product-image");
+        if (!holder) return;
+
+        const id = article.id;
+        const nameEl = article.querySelector("h2, h3");
+        const name = nameEl ? nameEl.textContent.trim() : id;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "fav-btn";
+        btn.dataset.favFor = id;
+        btn.setAttribute("aria-label", "Guardar " + name + " en favoritos");
+        paintHeart(btn, readFavs().includes(id));
+        holder.appendChild(btn);
+
+        btn.addEventListener("click", () => {
+            const favs = readFavs();
+            const idx = favs.indexOf(id);
+            if (idx >= 0) {
+                favs.splice(idx, 1);
+                showToast("Quitaste " + name + " de tus favoritos");
+            } else {
+                favs.push(id);
+                showToast("♥ " + name + " guardado en favoritos");
+            }
+            writeFavs(favs);
+            paintHeart(btn, idx < 0);
+        });
+    });
+
+    // Si cambias favoritos en otra pestana, se actualizan los corazones aqui
+    window.addEventListener("storage", (e) => {
+        if (e.key !== FAV_KEY) return;
+        const favs = readFavs();
+        document.querySelectorAll(".fav-btn").forEach((b) =>
+            paintHeart(b, favs.includes(b.dataset.favFor)));
+    });
+
+
+    /* ---------------- 8. TAMANO DE TEXTO (ACCESIBILIDAD) ---------------- */
+    // Cambia el font-size de <html>; como Tailwind usa rem, todo el sitio escala.
+    const FS_KEY = "sais_font_size";
+    const FS_STEPS = [87.5, 100, 112.5, 125];   // porcentajes
+    const FS_DEFAULT = 1;                       // indice de 100 %
+
+    const fsSaved = localStorage.getItem(FS_KEY);   // null si nunca se eligio
+    let fsIndex = fsSaved === null ? FS_DEFAULT : Number(fsSaved);
+    if (!Number.isInteger(fsIndex) || fsIndex < 0 || fsIndex >= FS_STEPS.length) fsIndex = FS_DEFAULT;
+
+    const fsBox = document.createElement("div");
+    fsBox.className = "fs-control";
+    fsBox.setAttribute("role", "group");
+    fsBox.setAttribute("aria-label", "Tamaño del texto");
+    fsBox.innerHTML = `
+        <button type="button" data-fs="-1" aria-label="Reducir texto">A&minus;</button>
+        <button type="button" data-fs="0" aria-label="Tamaño normal">A</button>
+        <button type="button" data-fs="1" aria-label="Aumentar texto">A+</button>`;
+    document.body.appendChild(fsBox);
+
+    function applyFontSize() {
+        document.documentElement.style.fontSize = FS_STEPS[fsIndex] + "%";
+        fsBox.querySelector('[data-fs="-1"]').disabled = fsIndex === 0;
+        fsBox.querySelector('[data-fs="1"]').disabled = fsIndex === FS_STEPS.length - 1;
+        fsBox.querySelector('[data-fs="0"]').classList.toggle("active", fsIndex === FS_DEFAULT);
+        try { localStorage.setItem(FS_KEY, fsIndex); } catch (e) { /* modo privado */ }
+    }
+
+    fsBox.addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-fs]");
+        if (!b || b.disabled) return;
+        const step = Number(b.dataset.fs);
+        fsIndex = step === 0 ? FS_DEFAULT : fsIndex + step;
+        applyFontSize();
+        showToast("Texto al " + FS_STEPS[fsIndex] + " %");
+    });
+    applyFontSize();
+
 });
