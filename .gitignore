@@ -3,7 +3,14 @@ __pycache__/
 *.pyc
 .env
 .vscode/
+<<<<<<< HEAD
 .venv/
 __pycache__/
 *.pyc
 node_modules/
+=======
+
+node_modules/
+
+venv/
+>>>>>>> origin/develop
