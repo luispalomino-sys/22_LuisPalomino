@@ -785,3 +785,80 @@ body:has(img[alt="Matahuasi Junín"]) main section:nth-of-type(3) h2 {
     }
 
 }
+
+
+/* ==========================================================
+   7. FAVORITOS + TOAST   |   8. TAMANO DE TEXTO
+   ========================================================== */
+.product-image { position: relative; }
+
+.fav-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .92);
+    color: #17624f;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .2);
+    transition: transform .2s ease, color .2s ease;
+}
+.fav-btn:hover { transform: scale(1.12); }
+.fav-btn:focus-visible { outline: 3px solid #17624f; outline-offset: 2px; }
+.fav-btn.on { color: #d6336c; animation: fav-pop .35s ease; }
+
+@keyframes fav-pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+
+#sf-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translate(-50%, 20px);
+    background: #163832;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-size: .9rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 320;
+}
+#sf-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.fs-control {
+    position: fixed;
+    left: 20px;
+    bottom: 84px;
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+    background: #fff;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .2);
+    z-index: 95;
+}
+.fs-control button {
+    min-width: 38px;
+    height: 34px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #163832;
+    font-weight: 700;
+    cursor: pointer;
+}
+.fs-control button:hover:not(:disabled) { background: #e8f3ef; }
+.fs-control button.active { background: #17624f; color: #fff; }
+.fs-control button:disabled { opacity: .35; cursor: not-allowed; }
+.fs-control button:focus-visible { outline: 3px solid #17624f; outline-offset: 1px; }
