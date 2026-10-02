@@ -92,7 +92,15 @@ const translations = {
     "contact.success_title": "¡Mensaje enviado!",
     "contact.success_desc": "Gracias por comunicarte con nosotros. Hemos recibido tu mensaje correctamente.",
     "contact.btn_home": "Volver al inicio",
-
+    "contact.select_subject": "Selecciona una opción",
+    "contact.option_buy_cuy": "Quiero comprar cuys",
+    "contact.option_buy_quinua": "Quiero comprar quinua",
+    "contact.option_products_info": "Quiero información sobre los productos",
+    "contact.option_partner": "Quiero ser productor asociado",
+    "contact.option_cooperative": "Quiero conocer más sobre la cooperativa",
+    "contact.option_question": "Tengo una consulta",
+    "contact.option_other": "Otro",
+    
     // Página: COMPRA / CARRITO
     "buy.hero_title": "Compra",
     "buy.hero_desc": "Realiza tu pedido de manera sencilla.",
@@ -248,6 +256,14 @@ const translations = {
     "contact.success_title": "Message Sent!",
     "contact.success_desc": "Thank you for contacting us. We have received your message successfully.",
     "contact.btn_home": "Back to Home",
+    "contact.select_subject": "Select an option",
+    "contact.option_buy_cuy": "I want to buy guinea pigs",
+    "contact.option_buy_quinua": "I want to buy quinoa",
+    "contact.option_products_info": "I want information about the products",
+    "contact.option_partner": "I want to become an associated producer",
+    "contact.option_cooperative": "I want to learn more about the cooperative",
+    "contact.option_question": "I have a question",
+    "contact.option_other": "Other",
 
     // Page: CART / CHECKOUT
     "buy.hero_title": "Checkout",
