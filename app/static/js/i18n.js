@@ -1,6 +1,6 @@
 /* ==========================================================
- i18n.js - Gestor de Traducciones Completo (Español / Inglés)
- ========================================================== */
+   i18n.js - Gestor de Traducciones Completo (Español / Inglés)
+   ========================================================== */
 
 const translations = {
   es: {
@@ -100,7 +100,7 @@ const translations = {
     "contact.option_cooperative": "Quiero conocer más sobre la cooperativa",
     "contact.option_question": "Tengo una consulta",
     "contact.option_other": "Otro",
-    
+
     // Página: COMPRA / CARRITO
     "buy.hero_title": "Compra",
     "buy.hero_desc": "Realiza tu pedido de manera sencilla.",
@@ -167,6 +167,7 @@ const translations = {
     "coupon.removed": "Cupón eliminado.",
     "coupon.applied": "Cupón aplicado"
   },
+
   en: {
     // Navigation (Header & Footer)
     "nav.home": "Home",
@@ -333,21 +334,44 @@ const translations = {
   }
 };
 
+
+/* ==========================================================
+   IDIOMA ACTUAL
+   ========================================================== */
+
 let currentLang = localStorage.getItem("sais_lang") || "es";
+
+
+/* ==========================================================
+   FUNCIÓN DE TRADUCCIÓN
+   ========================================================== */
 
 function t(key) {
   return translations[currentLang]?.[key] || key;
 }
 
+
+/* ==========================================================
+   CAMBIAR IDIOMA
+   ========================================================== */
+
 function setLanguage(lang) {
   if (!translations[lang]) return;
+
   currentLang = lang;
+
   localStorage.setItem("sais_lang", lang);
+
   document.documentElement.lang = lang;
 
-  // Actualizar textos con atributo data-i18n
+
+  /* --------------------------------------------------------
+     Actualizar textos con data-i18n
+     -------------------------------------------------------- */
+
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
+
     if (translations[lang][key]) {
       if (translations[lang][key].includes("\n")) {
         el.innerText = translations[lang][key];
@@ -357,32 +381,157 @@ function setLanguage(lang) {
     }
   });
 
-  // Actualizar placeholders
+
+  /* --------------------------------------------------------
+     Actualizar placeholders
+     -------------------------------------------------------- */
+
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.getAttribute("data-i18n-placeholder");
+
     if (translations[lang][key]) {
       el.placeholder = translations[lang][key];
     }
   });
 
-  // Actualizar el texto del botón de idioma
-  const langBtn = document.getElementById("lang-toggle-btn");
+
+  /* --------------------------------------------------------
+     Actualizar botón de idioma
+     
+     Soporta:
+     - id="lang-toggle-btn"  ← botón original
+     - id="lang-toggle"      ← por si tu HTML actual usa este
+     -------------------------------------------------------- */
+
+  const langBtn =
+    document.getElementById("lang-toggle-btn") ||
+    document.getElementById("lang-toggle");
+
   if (langBtn) {
     langBtn.textContent = currentLang === "es" ? "EN" : "ES";
   }
 
-  // Evento global para scripts secundarios (features.js, cuy.js, main.js)
-  window.dispatchEvent(new CustomEvent("sais:lang-changed", { detail: { lang } }));
+
+  /* --------------------------------------------------------
+     Evento global para otros scripts
+     -------------------------------------------------------- */
+
+  window.dispatchEvent(
+    new CustomEvent("sais:lang-changed", {
+      detail: {
+        lang: lang
+      }
+    })
+  );
 }
 
+
+/* ==========================================================
+   INICIAR BOTÓN DE IDIOMA
+   ========================================================== */
+
+/* ==========================================================
+   INICIAR SISTEMA DE IDIOMA
+   ========================================================== */
+
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* --------------------------------------------------------
+     CREAR BOTÓN DE IDIOMA SI NO EXISTE
+     -------------------------------------------------------- */
+
+  let langToggleBtn = document.getElementById("lang-toggle-btn");
+
+  if (!langToggleBtn) {
+
+    langToggleBtn = document.createElement("button");
+
+    langToggleBtn.type = "button";
+    langToggleBtn.id = "lang-toggle-btn";
+
+    langToggleBtn.className =
+      "w-9 h-9 flex items-center justify-center rounded-full text-white hover:bg-white/10 transition font-semibold text-sm";
+
+    langToggleBtn.setAttribute(
+      "aria-label",
+      "Cambiar idioma"
+    );
+
+    /*
+      Buscamos el carrito del header.
+      El botón de idioma se colocará inmediatamente
+      antes del carrito.
+    */
+
+    const cartLink = document.querySelector(
+      'a[aria-label="Carrito de compras"]'
+    );
+
+    if (cartLink && cartLink.parentNode) {
+
+      cartLink.parentNode.insertBefore(
+        langToggleBtn,
+        cartLink
+      );
+
+    } else {
+
+      /*
+        Si por alguna razón no encontramos el carrito,
+        buscamos el header como alternativa.
+      */
+
+      const header = document.querySelector("header");
+
+      if (header) {
+        header.appendChild(langToggleBtn);
+      }
+
+    }
+  }
+
+
+  /* --------------------------------------------------------
+     APLICAR IDIOMA GUARDADO
+     -------------------------------------------------------- */
+
   setLanguage(currentLang);
 
-  const langToggleBtn = document.getElementById("lang-toggle-btn");
+
+  /* --------------------------------------------------------
+     ACTIVAR BOTÓN DE IDIOMA
+     -------------------------------------------------------- */
+
+  /*
+    Volvemos a buscarlo porque puede haber sido creado
+    dinámicamente arriba.
+  */
+
+  langToggleBtn = document.getElementById("lang-toggle-btn");
+
   if (langToggleBtn) {
-    langToggleBtn.addEventListener("click", () => {
-      const newLang = currentLang === "es" ? "en" : "es";
-      setLanguage(newLang);
-    });
+
+    /*
+      Evitamos registrar el evento dos veces
+      si el script se carga nuevamente.
+    */
+
+    if (!langToggleBtn.dataset.i18nReady) {
+
+      langToggleBtn.dataset.i18nReady = "true";
+
+      langToggleBtn.addEventListener("click", () => {
+
+        const newLang =
+          currentLang === "es"
+            ? "en"
+            : "es";
+
+        setLanguage(newLang);
+
+      });
+
+    }
   }
+
 });

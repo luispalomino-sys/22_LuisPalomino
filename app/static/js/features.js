@@ -5,610 +5,378 @@
    Funciones:
    1. Buscador global
    2. Mini-carrito lateral
-   3. Cupones
-   4. Validación de formularios
-   5. Barra de progreso
-   6. Botón volver arriba
-   7. Animaciones al hacer scroll
+   3. Agregar / quitar productos
+   4. Cupones
+   5. Validación de formularios
+   6. Barra de progreso
+   7. Botón volver arriba
+   8. Animaciones al hacer scroll
    ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     const CART_KEY = "sais_cart";
 
-
     /* ==========================================================
        UTILIDADES
        ========================================================== */
 
     function readCart() {
-
         try {
+            const stored = localStorage.getItem(CART_KEY);
 
-            const stored =
-                localStorage.getItem(
-                    CART_KEY
-                );
+            if (!stored) return [];
 
-            if (!stored) {
-                return [];
-            }
+            const cart = JSON.parse(stored);
 
-            const cart =
-                JSON.parse(stored);
-
-            return Array.isArray(cart)
-                ? cart
-                : [];
-
+            return Array.isArray(cart) ? cart : [];
         } catch (error) {
-
             return [];
         }
     }
 
+    function saveCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
-    function money(number) {
-
-        return (
-            "S/ " +
-            Number(number).toFixed(2)
+        window.dispatchEvent(
+            new Event("sais:cart-changed")
         );
     }
 
-
-    function escapeHTML(value) {
-
-        return String(value)
-            .replace(
-                /[&<>"']/g,
-                (character) => {
-
-                    const entities = {
-
-                        "&": "&amp;",
-
-                        "<": "&lt;",
-
-                        ">": "&gt;",
-
-                        '"': "&quot;",
-
-                        "'": "&#39;"
-
-                    };
-
-                    return entities[
-                        character
-                    ];
-                }
-            );
+    function money(value) {
+        return `S/ ${Number(value || 0).toFixed(2)}`;
     }
 
+    function escapeHTML(value) {
+        return String(value ?? "").replace(
+            /[&<>"']/g,
+            character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[character])
+        );
+    }
 
     /* ==========================================================
-       ESTILOS DEL MINI CARRITO
+       ESTILOS
        ========================================================== */
 
-    function createMiniCartStyles() {
+    function createStyles() {
 
-        if (
-            document.getElementById(
-                "mini-cart-styles"
-            )
-        ) {
+        if (document.getElementById("sais-features-styles")) {
             return;
         }
 
+        const style = document.createElement("style");
 
-        const style =
-            document.createElement(
-                "style"
-            );
-
-        style.id =
-            "mini-cart-styles";
-
+        style.id = "sais-features-styles";
 
         style.textContent = `
 
-            .mc-overlay {
-
-                position: fixed;
-
-                inset: 0;
-
-                z-index: 150;
-
-                background:
-                    rgba(0,0,0,.45);
-
-                opacity: 0;
-
-                pointer-events: none;
-
-                transition: .25s;
-            }
-
-
-            .mc-overlay.open {
-
-                opacity: 1;
-
-                pointer-events: auto;
-            }
-
-
-            .mc-panel {
-
-                position: fixed;
-
-                top: 0;
-
-                right: 0;
-
-                height: 100%;
-
-                width:
-                    min(390px, 92vw);
-
-                z-index: 160;
-
-                background: #fff;
-
-                box-shadow:
-                    -10px 0 40px
-                    rgba(0,0,0,.25);
-
-                transform:
-                    translateX(100%);
-
-                transition:
-                    transform .3s ease;
-
-                display: flex;
-
-                flex-direction: column;
-            }
-
-
-            .mc-panel.open {
-
-                transform:
-                    translateX(0);
-            }
-
-
-            .mc-head {
-
-                display: flex;
-
-                justify-content:
-                    space-between;
-
-                align-items: center;
-
-                padding:
-                    18px 20px;
-
-                background:
-                    #063f35;
-
-                color: #fff;
-
-                font-weight: 700;
-            }
-
-
-            .mc-head button {
-
-                background: none;
-
-                border: 0;
-
-                color: #fff;
-
-                font-size: 1.6rem;
-
-                cursor: pointer;
-
-                line-height: 1;
-            }
-
-
-            .mc-body {
-
-                flex: 1;
-
-                overflow: auto;
-
-                padding:
-                    14px 20px;
-            }
-
-
-            .mc-row {
-
-                display: flex;
-
-                gap: 12px;
-
-                align-items: center;
-
-                padding:
-                    10px 0;
-
-                border-bottom:
-                    1px solid #eef3f1;
-            }
-
-
-            .mc-row img {
-
-                width: 54px;
-
-                height: 54px;
-
-                border-radius: 10px;
-
-                object-fit: cover;
-            }
-
-
-            .mc-row-info {
-
-                flex: 1;
-
-                font-size: .9rem;
-
-                color: #165449;
-            }
-
-
-            .mc-row small {
-
-                color: #6b7e78;
-            }
-
-
-            .mc-row button {
-
-                background: none;
-
-                border: 0;
-
-                color: #d33;
-
-                cursor: pointer;
-
-                font-size: .75rem;
-            }
-
-
-            .mc-foot {
-
-                padding:
-                    16px 20px;
-
-                border-top:
-                    1px solid #e3ebe8;
-            }
-
-
-            .mc-total {
-
-                display: flex;
-
-                justify-content:
-                    space-between;
-
-                font-weight: 700;
-
-                margin-bottom: 12px;
-
-                color: #165449;
-            }
-
-
-            .mc-go {
-
-                display: block;
-
-                text-align: center;
-
-                background:
-                    #17624f;
-
-                color: #fff;
-
-                padding: 12px;
-
-                border-radius:
-                    999px;
-
-                font-weight: 700;
-
-                text-decoration: none;
-            }
-
-
-            .mc-empty {
-
-                text-align: center;
-
-                color: #6b7e78;
-
-                padding: 40px 0;
-            }
-
-
-            .cp-box {
-
-                margin-top: 20px;
-
-                padding: 16px;
-
-                border:
-                    1px solid #dce8e3;
-
-                border-radius:
-                    14px;
-
-                background:
-                    #f8faf8;
-            }
-
-
-            .cp-row {
-
-                display: flex;
-
-                gap: 8px;
-            }
-
-
-            .cp-row input {
-
-                flex: 1;
-
-                min-width: 0;
-
-                padding:
-                    10px 12px;
-
-                border:
-                    1px solid #dce8e3;
-
-                border-radius:
-                    8px;
-
-                outline: none;
-            }
-
-
-            .cp-row input:focus {
-
-                border-color:
-                    #397d6c;
-            }
-
-
-            .cp-row button {
-
-                padding:
-                    10px 14px;
-
-                border: 0;
-
-                border-radius:
-                    8px;
-
-                background:
-                    #17624f;
-
-                color: white;
-
-                font-weight: 600;
-
-                cursor: pointer;
-            }
-
-
-            .cp-msg {
-
-                display: block;
-
-                margin-top: 8px;
-
-                font-size: .78rem;
-            }
-
-
-            .cp-success {
-
-                color:
-                    #17624f;
-            }
-
-
-            .cp-error {
-
-                color:
-                    #c0392b;
-            }
-
-
-            .fv-error {
-
-                color:
-                    #c0392b;
-
-                font-size:
-                    .78rem;
-
-                margin-top:
-                    5px;
-            }
-
-
-            .fv-invalid {
-
-                border-color:
-                    #c0392b !important;
-            }
-
-
-            .fv-valid {
-
-                border-color:
-                    #397d6c !important;
-            }
-
-
-            .fv-counter {
-
-                text-align:
-                    right;
-
-                color:
-                    #6b7e78;
-
-                font-size:
-                    .75rem;
-
-                margin-top:
-                    4px;
-            }
-
-
-            .scroll-progress {
-
-                position: fixed;
-
-                top: 0;
-
-                left: 0;
-
-                height: 3px;
-
-                width: 0;
-
-                z-index: 500;
-
-                background:
-                    #a9e6a1;
-            }
-
-
-            .back-top {
-
-                position: fixed;
-
-                right: 22px;
-
-                bottom: 22px;
-
-                width: 42px;
-
-                height: 42px;
-
-                border: 0;
-
-                border-radius: 50%;
-
-                background:
-                    #063f35;
-
-                color: #fff;
-
-                cursor: pointer;
-
-                z-index: 120;
-
-                opacity: 0;
-
-                pointer-events: none;
-
-                transform:
-                    translateY(10px);
-
-                transition:
-                    .25s;
-            }
-
-
-            .back-top.show {
-
-                opacity: 1;
-
-                pointer-events: auto;
-
-                transform:
-                    translateY(0);
-            }
-
-
-            .reveal-item {
-
-                opacity: 0;
-
-                transform:
-                    translateY(20px);
-
-                transition:
-                    opacity .6s ease,
-                    transform .6s ease;
-            }
-
-
-            .reveal-item.revealed {
-
-                opacity: 1;
-
-                transform:
-                    translateY(0);
-            }
+        .mc-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 150;
+            background: rgba(0,0,0,.45);
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s ease;
+        }
+
+        .mc-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mc-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: min(390px, 92vw);
+            z-index: 160;
+            background: #fff;
+            box-shadow: -10px 0 40px rgba(0,0,0,.25);
+            transform: translateX(100%);
+            transition: transform .3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mc-panel.open {
+            transform: translateX(0);
+        }
+
+        .mc-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            background: #063f35;
+            color: white;
+            font-weight: 700;
+        }
+
+        .mc-head button {
+            background: none;
+            border: 0;
+            color: white;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .mc-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 20px;
+        }
+
+        .mc-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef3f1;
+        }
+
+        .mc-row img {
+            width: 58px;
+            height: 58px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .mc-row-info {
+            flex: 1;
+            color: #165449;
+        }
+
+        .mc-row-info strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .mc-quantity {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 7px;
+        }
+
+        .mc-quantity button {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #dce8e3;
+            border-radius: 6px;
+            background: #f8faf8;
+            cursor: pointer;
+        }
+
+        .mc-remove {
+            border: 0;
+            background: none;
+            color: #c0392b;
+            font-size: .75rem;
+            cursor: pointer;
+        }
+
+        .mc-foot {
+            padding: 18px 20px;
+            border-top: 1px solid #e3ebe8;
+        }
+
+        .mc-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            color: #165449;
+            margin-bottom: 12px;
+        }
+
+        .mc-go {
+            display: block;
+            text-align: center;
+            background: #17624f;
+            color: white;
+            padding: 12px;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .mc-empty {
+            text-align: center;
+            color: #6b7e78;
+            padding: 50px 10px;
+        }
+
+        .cp-box {
+            margin-top: 20px;
+            padding: 16px;
+            border: 1px solid #dce8e3;
+            border-radius: 14px;
+            background: #f8faf8;
+        }
+
+        .cp-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .cp-row input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            border: 1px solid #dce8e3;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .cp-row button {
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: #17624f;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cp-msg {
+            display: block;
+            margin-top: 8px;
+            font-size: .78rem;
+        }
+
+        .cp-success {
+            color: #17624f;
+        }
+
+        .cp-error {
+            color: #c0392b;
+        }
+
+        .fv-error {
+            color: #c0392b;
+            font-size: .78rem;
+            margin-top: 5px;
+        }
+
+        .fv-invalid {
+            border-color: #c0392b !important;
+        }
+
+        .fv-valid {
+            border-color: #397d6c !important;
+        }
+
+        .fv-counter {
+            text-align: right;
+            color: #6b7e78;
+            font-size: .75rem;
+            margin-top: 4px;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            z-index: 500;
+            background: #a9e6a1;
+        }
+
+        .back-top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            width: 42px;
+            height: 42px;
+            border: 0;
+            border-radius: 50%;
+            background: #063f35;
+            color: white;
+            cursor: pointer;
+            z-index: 120;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: .25s;
+        }
+
+        .back-top.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition:
+                opacity .6s ease,
+                transform .6s ease;
+        }
+
+        .reveal-item.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         `;
 
-
-        document.head.appendChild(
-            style
-        );
+        document.head.appendChild(style);
     }
 
-
-    createMiniCartStyles();
+    createStyles();
 
 
     /* ==========================================================
-       MINI CARRITO
+       CONTADOR DEL CARRITO
        ========================================================== */
 
-    const miniOverlay =
-        document.createElement(
-            "div"
+    function updateCartCount() {
+
+        const element = document.getElementById("cart-count");
+
+        if (!element) return;
+
+        const cart = readCart();
+
+        const quantity = cart.reduce(
+            (total, item) =>
+                total + Number(item.quantity || 0),
+            0
         );
 
-    miniOverlay.className =
-        "mc-overlay";
+        element.textContent = quantity;
+    }
 
 
-    const miniPanel =
-        document.createElement(
-            "aside"
-        );
+    /* ==========================================================
+       CREAR MINI CARRITO
+       ========================================================== */
 
-    miniPanel.className =
-        "mc-panel";
+    const miniOverlay = document.createElement("div");
 
+    miniOverlay.className = "mc-overlay";
+
+
+    const miniPanel = document.createElement("aside");
+
+    miniPanel.className = "mc-panel";
 
     miniPanel.innerHTML = `
 
         <div class="mc-head">
 
-            <span>
-                🛒 Mi carrito
+            <span data-i18n="cart.title">
+                Tu carrito
             </span>
 
             <button
@@ -621,19 +389,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </div>
 
-
         <div
             class="mc-body"
             id="mc-body"
         ></div>
 
-
         <div class="mc-foot">
 
             <div class="mc-total">
 
-                <span>
-                    Total
+                <span data-i18n="cart.subtotal">
+                    Subtotal
                 </span>
 
                 <span id="mc-total">
@@ -645,36 +411,32 @@ document.addEventListener("DOMContentLoaded", () => {
             <a
                 href="/compra"
                 class="mc-go"
+                data-i18n="cart.checkout"
             >
                 Ir a comprar
             </a>
 
         </div>
-
     `;
 
+    document.body.appendChild(miniOverlay);
+    document.body.appendChild(miniPanel);
 
-    document.body.append(
-        miniOverlay,
-        miniPanel
-    );
 
+    /* ==========================================================
+       RENDER MINI CARRITO
+       ========================================================== */
 
     function renderMiniCart() {
 
-        const cart =
-            readCart();
+        const cart = readCart();
 
+        const body = document.getElementById("mc-body");
 
-        const body =
-            miniPanel.querySelector(
-                "#mc-body"
-            );
+        const totalElement =
+            document.getElementById("mc-total");
 
-
-        if (!body) {
-            return;
-        }
+        if (!body) return;
 
 
         if (cart.length === 0) {
@@ -683,132 +445,122 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <div class="mc-empty">
 
-                    <div
-                        style="
-                            font-size:2.5rem;
-                            margin-bottom:10px;
-                        "
-                    >
+                    <div style="
+                        font-size:2.5rem;
+                        margin-bottom:10px;
+                    ">
                         🛒
                     </div>
 
-                    <p>
+                    <p data-i18n="cart.empty">
                         Tu carrito está vacío.
                     </p>
 
                 </div>
-
             `;
 
         } else {
 
-            body.innerHTML =
-                cart.map(
-                    (item) => {
+            body.innerHTML = cart.map(item => `
 
-                        return `
+                <div class="mc-row">
 
-                            <div
-                                class="mc-row"
+                    <img
+                        src="${escapeHTML(item.image || "")}"
+                        alt="${escapeHTML(item.name)}"
+                    >
+
+                    <div class="mc-row-info">
+
+                        <strong>
+                            ${escapeHTML(item.name)}
+                        </strong>
+
+                        <small>
+                            ${money(item.price)}
+                        </small>
+
+                        <div class="mc-quantity">
+
+                            <button
+                                type="button"
+                                data-cart-minus="${escapeHTML(item.id)}"
                             >
+                                −
+                            </button>
 
-                                <img
-                                    src="${escapeHTML(item.image)}"
-                                    alt="${escapeHTML(item.name)}"
-                                >
+                            <span>
+                                ${item.quantity}
+                            </span>
 
-                                <div
-                                    class="mc-row-info"
-                                >
+                            <button
+                                type="button"
+                                data-cart-plus="${escapeHTML(item.id)}"
+                            >
+                                +
+                            </button>
 
-                                    <strong>
-                                        ${escapeHTML(item.name)}
-                                    </strong>
+                            <button
+                                type="button"
+                                class="mc-remove"
+                                data-mc-remove="${escapeHTML(item.id)}"
+                            >
+                                Quitar
+                            </button>
 
-                                    <br>
+                        </div>
 
-                                    <small>
-                                        ${item.quantity}
-                                        ×
-                                        ${money(item.price)}
-                                    </small>
+                    </div>
 
-                                </div>
+                </div>
 
-                                <button
-                                    type="button"
-                                    data-mc-remove="${escapeHTML(item.id)}"
-                                >
-                                    Quitar
-                                </button>
-
-                            </div>
-
-                        `;
-
-                    }
-                ).join("");
+            `).join("");
         }
 
 
-        const total =
-            cart.reduce(
-                (sum, item) => {
-
-                    return sum +
-                        Number(item.price) *
-                        Number(item.quantity);
-
-                },
-                0
-            );
-
-
-        const totalElement =
-            miniPanel.querySelector(
-                "#mc-total"
-            );
-
+        const subtotal = cart.reduce(
+            (sum, item) =>
+                sum +
+                Number(item.price || 0) *
+                Number(item.quantity || 0),
+            0
+        );
 
         if (totalElement) {
+            totalElement.textContent = money(subtotal);
+        }
 
-            totalElement.textContent =
-                money(total);
+        updateCartCount();
+
+        if (typeof setLanguage === "function") {
+            setLanguage(
+                localStorage.getItem("sais_lang") || "es"
+            );
         }
     }
 
+
+    /* ==========================================================
+       ABRIR / CERRAR MINI CARRITO
+       ========================================================== */
 
     function openMiniCart() {
 
         renderMiniCart();
 
-        miniOverlay.classList.add(
-            "open"
-        );
+        miniOverlay.classList.add("open");
+        miniPanel.classList.add("open");
 
-        miniPanel.classList.add(
-            "open"
-        );
-
-        document.body.classList.add(
-            "overflow-hidden"
-        );
+        document.body.classList.add("overflow-hidden");
     }
 
 
     function closeMiniCart() {
 
-        miniOverlay.classList.remove(
-            "open"
-        );
+        miniOverlay.classList.remove("open");
+        miniPanel.classList.remove("open");
 
-        miniPanel.classList.remove(
-            "open"
-        );
-
-        document.body.classList.remove(
-            "overflow-hidden"
-        );
+        document.body.classList.remove("overflow-hidden");
     }
 
 
@@ -818,132 +570,419 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    const miniClose =
-        miniPanel.querySelector(
-            "#mc-close"
+    document
+        .getElementById("mc-close")
+        ?.addEventListener(
+            "click",
+            closeMiniCart
         );
 
 
-    if (miniClose) {
+    /* ==========================================================
+       BOTÓN DEL CARRITO
+       ========================================================== */
 
-        miniClose.addEventListener(
+    const cartLink = document.querySelector(
+        'a[aria-label="Carrito de compras"]'
+    );
+
+    const isPurchasePage =
+        !!document.getElementById("purchase-step-1");
+
+
+    if (cartLink && !isPurchasePage) {
+
+        cartLink.addEventListener(
             "click",
-            closeMiniCart
+            event => {
+
+                event.preventDefault();
+
+                openMiniCart();
+            }
         );
     }
 
 
-    miniPanel.addEventListener(
+    /* ==========================================================
+       AGREGAR PRODUCTOS
+       ========================================================== */
+
+    function findProductData(button) {
+
+        let id =
+            button.dataset.productId ||
+            button.dataset.id ||
+            button.getAttribute("data-add-to-cart");
+
+
+        let name =
+            button.dataset.productName ||
+            button.dataset.name;
+
+
+        let price =
+            button.dataset.productPrice ||
+            button.dataset.price;
+
+
+        let image =
+            button.dataset.productImage ||
+            button.dataset.image;
+
+
+        /*
+         * Si el botón no tiene atributos,
+         * buscamos información dentro de su tarjeta.
+         */
+
+        const card =
+            button.closest(
+                "[data-product], .product-item, article, .product-card, .group"
+            );
+
+
+        if (card) {
+
+            id =
+                id ||
+                card.dataset.productId ||
+                card.dataset.id ||
+                card.dataset.product;
+
+            name =
+                name ||
+                card.dataset.productName ||
+                card.dataset.name;
+
+            price =
+                price ||
+                card.dataset.productPrice ||
+                card.dataset.price;
+
+            image =
+                image ||
+                card.dataset.productImage ||
+                card.dataset.image;
+
+
+            if (!name) {
+
+                const title =
+                    card.querySelector(
+                        "h1, h2, h3, h4, .product-title"
+                    );
+
+                if (title) {
+                    name = title.textContent.trim();
+                }
+            }
+
+
+            if (!price) {
+
+                const priceElement =
+                    card.querySelector(
+                        "[data-price], .price"
+                    );
+
+                if (priceElement) {
+
+                    price =
+                        priceElement.dataset.price ||
+                        priceElement.textContent
+                            .replace(/[^\d.,]/g, "")
+                            .replace(",", ".");
+                }
+            }
+
+
+            if (!image) {
+
+                const img =
+                    card.querySelector("img");
+
+                if (img) {
+                    image =
+                        img.currentSrc ||
+                        img.src;
+                }
+            }
+        }
+
+
+        /*
+         * Último recurso: texto cercano al botón.
+         */
+
+        if (!name) {
+
+            name =
+                button.dataset.product ||
+                button.textContent
+                    .replace(/agregar al carrito/i, "")
+                    .trim() ||
+                "Producto";
+        }
+
+
+        if (!price) {
+
+            const parentText =
+                button.parentElement?.textContent || "";
+
+            const match =
+                parentText.match(
+                    /(?:S\/|S\/\.)?\s*(\d+(?:[.,]\d{1,2})?)/
+                );
+
+            if (match) {
+                price =
+                    match[1].replace(",", ".");
+            }
+        }
+
+
+        price = Number(
+            String(price || 0)
+                .replace("S/", "")
+                .replace(",", ".")
+                .trim()
+        );
+
+
+        if (!id) {
+            id =
+                name
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-|-$/g, "");
+        }
+
+
+        return {
+            id: String(id),
+            name: String(name || "Producto"),
+            price: price,
+            image: image || ""
+        };
+    }
+
+
+    function addToCart(product) {
+
+        const cart = readCart();
+
+        const existing =
+            cart.find(
+                item =>
+                    String(item.id) ===
+                    String(product.id)
+            );
+
+
+        if (existing) {
+
+            existing.quantity =
+                Number(existing.quantity || 0) + 1;
+
+        } else {
+
+            cart.push({
+                id: String(product.id),
+                name: product.name,
+                price: Number(product.price || 0),
+                image: product.image || "",
+                quantity: 1
+            });
+        }
+
+
+        saveCart(cart);
+
+        renderMiniCart();
+
+        window.dispatchEvent(
+            new Event("sais:cart-added")
+        );
+    }
+
+
+    /*
+     * Delegación de eventos:
+     * funciona incluso si los productos se cargan
+     * después de iniciar la página.
+     */
+
+    document.addEventListener(
         "click",
-        (event) => {
+        event => {
 
             const button =
+                event.target.closest(
+                    "[data-add-to-cart], .add-to-cart, [data-cart-add]"
+                );
+
+
+            if (!button) return;
+
+
+            event.preventDefault();
+
+
+            const product =
+                findProductData(button);
+
+
+            addToCart(product);
+        }
+    );
+
+
+    /* ==========================================================
+       CONTROLES DEL MINI CARRITO
+       ========================================================== */
+
+    miniPanel.addEventListener(
+        "click",
+        event => {
+
+            const plus =
+                event.target.closest(
+                    "[data-cart-plus]"
+                );
+
+            const minus =
+                event.target.closest(
+                    "[data-cart-minus]"
+                );
+
+            const remove =
                 event.target.closest(
                     "[data-mc-remove]"
                 );
 
 
-            if (!button) {
+            if (plus) {
+
+                const id =
+                    String(plus.dataset.cartPlus);
+
+                const cart = readCart();
+
+                const item =
+                    cart.find(
+                        product =>
+                            String(product.id) === id
+                    );
+
+                if (item) {
+                    item.quantity++;
+                }
+
+                saveCart(cart);
+                renderMiniCart();
+
                 return;
             }
 
 
-            const id =
-                button.dataset.mcRemove;
+            if (minus) {
 
+                const id =
+                    String(minus.dataset.cartMinus);
 
-            const newCart =
-                readCart().filter(
-                    item =>
-                        item.id !== id
-                );
+                const cart = readCart();
 
+                const item =
+                    cart.find(
+                        product =>
+                            String(product.id) === id
+                    );
 
-            localStorage.setItem(
-                CART_KEY,
-                JSON.stringify(newCart)
-            );
+                if (item) {
 
+                    item.quantity--;
 
-            window.dispatchEvent(
-                new Event(
-                    "sais:cart-changed"
-                )
-            );
+                    if (item.quantity <= 0) {
 
+                        const index =
+                            cart.indexOf(item);
 
-            renderMiniCart();
-        }
-    );
+                        cart.splice(index, 1);
+                    }
+                }
 
+                saveCart(cart);
+                renderMiniCart();
 
-    /* ==========================================================
-       ABRIR MINI CARRITO DESDE EL ICONO
-       ========================================================== */
-
-    const cartLink =
-        document.querySelector(
-            'a[aria-label="Carrito de compras"]'
-        );
-
-
-    const isPurchasePage =
-        !!document.getElementById(
-            "purchase-step-1"
-        );
-
-
-    if (
-        cartLink &&
-        !isPurchasePage
-    ) {
-
-        cartLink.addEventListener(
-            "click",
-            (event) => {
-
-                event.preventDefault();
-
-                openMiniCart();
-
+                return;
             }
-        );
-    }
 
 
-    /* ==========================================================
-       ABRIR MINI CARRITO AL AGREGAR
-       ========================================================== */
+            if (remove) {
 
-    window.addEventListener(
-        "sais:cart-added",
-        () => {
+                const id =
+                    String(remove.dataset.mcRemove);
 
-            setTimeout(
-                () => {
+                const cart =
+                    readCart().filter(
+                        item =>
+                            String(item.id) !== id
+                    );
 
-                    openMiniCart();
-
-                },
-                150
-            );
-
+                saveCart(cart);
+                renderMiniCart();
+            }
         }
     );
 
 
     /* ==========================================================
-       ACTUALIZAR MINI CARRITO
+       EVENTOS DEL CARRITO
        ========================================================== */
 
     window.addEventListener(
         "sais:cart-changed",
         () => {
 
+            updateCartCount();
             renderMiniCart();
-
+            updateCouponDiscount();
         }
     );
+
+
+    window.addEventListener(
+        "storage",
+        event => {
+
+            if (event.key === CART_KEY) {
+
+                updateCartCount();
+                renderMiniCart();
+                updateCouponDiscount();
+            }
+        }
+    );
+
+
+    window.addEventListener(
+        "sais:cart-added",
+        () => {
+
+            setTimeout(
+                openMiniCart,
+                100
+            );
+        }
+    );
+
+
+    updateCartCount();
+    renderMiniCart();
 
 
     /* ==========================================================
@@ -951,351 +990,22 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================== */
 
     const COUPONS = {
-
         SAIS10: 0.10,
-
         CUY15: 0.15,
-
         QUINUA5: 0.05
-
     };
 
 
-    const subtotalElement =
-        document.getElementById(
-            "cart-subtotal"
-        );
-
-
-    if (subtotalElement) {
-
-        const subtotalRow =
-            subtotalElement.parentElement;
-
-
-        /* ------------------------------------------------------
-           FILA DEL DESCUENTO
-           ------------------------------------------------------ */
-
-        let discountRow =
-            document.getElementById(
-                "cart-discount-row"
-            );
-
-
-        if (!discountRow) {
-
-            discountRow =
-                document.createElement(
-                    "div"
-                );
-
-            discountRow.id =
-                "cart-discount-row";
-
-            discountRow.className =
-                "flex justify-between text-[#17624f]";
-
-
-            discountRow.innerHTML = `
-
-                <span>
-                    Descuento
-                </span>
-
-                <strong id="cart-discount">
-                    - S/ 0.00
-                </strong>
-
-            `;
-
-
-            subtotalRow.after(
-                discountRow
-            );
-        }
-
-
-        /* ------------------------------------------------------
-           CAJA DEL CUPÓN
-           ------------------------------------------------------ */
-
-        const couponBox =
-            document.createElement(
-                "div"
-            );
-
-
-        couponBox.className =
-            "cp-box";
-
-
-        couponBox.innerHTML = `
-
-            <label
-                style="
-                    font-size:.85rem;
-                    font-weight:600;
-                "
-            >
-                ¿Tienes un cupón?
-            </label>
-
-
-            <div class="cp-row">
-
-                <input
-                    type="text"
-                    id="coupon-input"
-                    placeholder="Ej. SAIS10"
-                    autocomplete="off"
-                >
-
-
-                <button
-                    type="button"
-                    id="coupon-button"
-                >
-                    Aplicar
-                </button>
-
-            </div>
-
-
-            <span
-                id="coupon-message"
-                class="cp-msg"
-            ></span>
-
-        `;
-
-
-        const totalRow =
-            document.getElementById(
-                "cart-total"
-            )?.parentElement;
-
-
-        if (totalRow) {
-
-            totalRow.before(
-                couponBox
-            );
-
-        } else {
-
-            subtotalRow.parentElement.append(
-                couponBox
-            );
-        }
-
-
-        /* ------------------------------------------------------
-           APLICAR CUPÓN
-           ------------------------------------------------------ */
-
-        const couponInput =
-            document.getElementById(
-                "coupon-input"
-            );
-
-
-        const couponButton =
-            document.getElementById(
-                "coupon-button"
-            );
-
-
-        const couponMessage =
-            document.getElementById(
-                "coupon-message"
-            );
-
-
-        function applyCoupon() {
-
-            if (
-                !couponInput ||
-                !couponMessage
-            ) {
-                return;
-            }
-
-
-            const code =
-                couponInput.value
-                    .trim()
-                    .toUpperCase();
-
-
-            if (!code) {
-
-                couponMessage.textContent =
-                    "Escribe un código.";
-
-                couponMessage.className =
-                    "cp-msg cp-error";
-
-                return;
-            }
-
-
-            if (
-                Object.prototype.hasOwnProperty.call(
-                    COUPONS,
-                    code
-                )
-            ) {
-
-                const rate =
-                    COUPONS[code];
-
-
-                localStorage.setItem(
-                    "sais_coupon_rate",
-                    rate
-                );
-
-
-                localStorage.setItem(
-                    "sais_coupon_code",
-                    code
-                );
-
-
-                couponMessage.textContent =
-                    `Cupón ${code} aplicado correctamente. Descuento del ${rate * 100}%.`;
-
-
-                couponMessage.className =
-                    "cp-msg cp-success";
-
-
-                window.dispatchEvent(
-                    new Event(
-                        "sais:cart-changed"
-                    )
-                );
-
-
-                /* Actualizar la vista */
-
-                updateCouponDiscount();
-
-            } else {
-
-                localStorage.removeItem(
-                    "sais_coupon_rate"
-                );
-
-                localStorage.removeItem(
-                    "sais_coupon_code"
-                );
-
-
-                couponMessage.textContent =
-                    "El cupón no es válido.";
-
-
-                couponMessage.className =
-                    "cp-msg cp-error";
-
-
-                window.dispatchEvent(
-                    new Event(
-                        "sais:cart-changed"
-                    )
-                );
-            }
-        }
-
-
-        if (couponButton) {
-
-            couponButton.addEventListener(
-                "click",
-                applyCoupon
-            );
-        }
-
-
-        if (couponInput) {
-
-            couponInput.addEventListener(
-                "keydown",
-                (event) => {
-
-                    if (
-                        event.key === "Enter"
-                    ) {
-
-                        event.preventDefault();
-
-                        applyCoupon();
-                    }
-
-                }
-            );
-        }
-
-
-        /* ------------------------------------------------------
-           MOSTRAR CUPÓN GUARDADO
-           ------------------------------------------------------ */
-
-        const savedCode =
-            localStorage.getItem(
-                "sais_coupon_code"
-            );
-
-
-        if (
-            savedCode &&
-            couponInput
-        ) {
-
-            couponInput.value =
-                savedCode;
-
-            if (couponMessage) {
-
-                const rate =
-                    Number(
-                        localStorage.getItem(
-                            "sais_coupon_rate"
-                        ) || 0
-                    );
-
-
-                couponMessage.textContent =
-                    `Cupón ${savedCode} aplicado: ${rate * 100}% de descuento.`;
-
-                couponMessage.className =
-                    "cp-msg cp-success";
-            }
-        }
-    }
-
-
-    /* ==========================================================
-       ACTUALIZAR DESCUENTO VISUAL
-       ========================================================== */
-
     function updateCouponDiscount() {
 
-        const cart =
-            readCart();
-
+        const cart = readCart();
 
         const subtotal =
             cart.reduce(
-                (sum, item) => {
-
-                    return sum +
-                        Number(item.price) *
-                        Number(item.quantity);
-
-                },
+                (sum, item) =>
+                    sum +
+                    Number(item.price || 0) *
+                    Number(item.quantity || 0),
                 0
             );
 
@@ -1325,6 +1035,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
+        const shipping =
+            subtotal > 0 ? 10 : 0;
+
+
+        const total =
+            Math.max(
+                0,
+                subtotal +
+                shipping -
+                discount
+            );
+
+
         const totalElement =
             document.getElementById(
                 "cart-total"
@@ -1333,23 +1056,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (totalElement) {
 
-            const shipping =
-                subtotal > 0
-                    ? 10
-                    : 0;
-
-
-            const total =
-                Math.max(
-                    0,
-                    subtotal +
-                    shipping -
-                    discount
-                );
-
-
             totalElement.textContent =
-                `S/ ${total.toFixed(2)}`;
+                money(total);
         }
 
 
@@ -1374,33 +1082,301 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (finalTotal) {
 
-            const shipping =
-                subtotal > 0
-                    ? 10
-                    : 0;
-
-
-            const total =
-                Math.max(
-                    0,
-                    subtotal +
-                    shipping -
-                    discount
-                );
-
-
             finalTotal.textContent =
-                `S/ ${total.toFixed(2)}`;
+                money(total);
         }
     }
 
 
-    window.addEventListener(
-        "sais:cart-changed",
-        updateCouponDiscount
-    );
+    function createCouponBox() {
+
+        const subtotalElement =
+            document.getElementById(
+                "cart-subtotal"
+            );
 
 
+        if (!subtotalElement) return;
+
+
+        if (
+            document.getElementById(
+                "coupon-box"
+            )
+        ) {
+            return;
+        }
+
+
+        const subtotalRow =
+            subtotalElement.parentElement;
+
+
+        if (!subtotalRow) return;
+
+
+        /*
+         * FILA DESCUENTO
+         */
+
+        let discountRow =
+            document.getElementById(
+                "cart-discount-row"
+            );
+
+
+        if (!discountRow) {
+
+            discountRow =
+                document.createElement("div");
+
+            discountRow.id =
+                "cart-discount-row";
+
+            discountRow.className =
+                "flex justify-between text-[#17624f] mt-2";
+
+
+            discountRow.innerHTML = `
+
+                <span data-i18n="coupon.discount">
+                    Descuento
+                </span>
+
+                <strong id="cart-discount">
+                    - S/ 0.00
+                </strong>
+            `;
+
+
+            subtotalRow.after(
+                discountRow
+            );
+        }
+
+
+        /*
+         * CAJA DEL CUPÓN
+         */
+
+        const couponBox =
+            document.createElement("div");
+
+        couponBox.id =
+            "coupon-box";
+
+        couponBox.className =
+            "cp-box";
+
+
+        couponBox.innerHTML = `
+
+            <label
+                class="block text-sm font-semibold text-[#165449]"
+                data-i18n="coupon.label"
+            >
+                ¿Tienes un cupón?
+            </label>
+
+            <div class="cp-row">
+
+                <input
+                    type="text"
+                    id="coupon-input"
+                    placeholder="Ej. SAIS10"
+                    autocomplete="off"
+                    data-i18n-placeholder="coupon.placeholder"
+                >
+
+                <button
+                    type="button"
+                    id="coupon-button"
+                    data-i18n="coupon.apply"
+                >
+                    Aplicar
+                </button>
+
+            </div>
+
+            <span
+                id="coupon-message"
+                class="cp-msg"
+            ></span>
+        `;
+
+
+        const totalElement =
+            document.getElementById(
+                "cart-total"
+            );
+
+
+        if (totalElement?.parentElement) {
+
+            totalElement
+                .parentElement
+                .before(couponBox);
+
+        } else {
+
+            subtotalRow.parentElement.append(
+                couponBox
+            );
+        }
+
+
+        const input =
+            document.getElementById(
+                "coupon-input"
+            );
+
+        const button =
+            document.getElementById(
+                "coupon-button"
+            );
+
+        const message =
+            document.getElementById(
+                "coupon-message"
+            );
+
+
+        function applyCoupon() {
+
+            const code =
+                input.value
+                    .trim()
+                    .toUpperCase();
+
+
+            if (!code) {
+
+                message.textContent =
+                    "Escribe un código.";
+
+                message.className =
+                    "cp-msg cp-error";
+
+                return;
+            }
+
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    COUPONS,
+                    code
+                )
+            ) {
+
+                const rate =
+                    COUPONS[code];
+
+
+                localStorage.setItem(
+                    "sais_coupon_code",
+                    code
+                );
+
+
+                localStorage.setItem(
+                    "sais_coupon_rate",
+                    rate
+                );
+
+
+                message.textContent =
+                    `Cupón ${code} aplicado. Descuento del ${rate * 100}%.`;
+
+                message.className =
+                    "cp-msg cp-success";
+
+
+                updateCouponDiscount();
+
+
+            } else {
+
+                localStorage.removeItem(
+                    "sais_coupon_code"
+                );
+
+                localStorage.removeItem(
+                    "sais_coupon_rate"
+                );
+
+
+                message.textContent =
+                    "El cupón no es válido.";
+
+                message.className =
+                    "cp-msg cp-error";
+
+
+                updateCouponDiscount();
+            }
+        }
+
+
+        button?.addEventListener(
+            "click",
+            applyCoupon
+        );
+
+
+        input?.addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    applyCoupon();
+                }
+            }
+        );
+
+
+        const savedCode =
+            localStorage.getItem(
+                "sais_coupon_code"
+            );
+
+
+        if (savedCode && input) {
+
+            input.value =
+                savedCode;
+
+            const rate =
+                Number(
+                    localStorage.getItem(
+                        "sais_coupon_rate"
+                    ) || 0
+                );
+
+
+            if (message) {
+
+                message.textContent =
+                    `Cupón ${savedCode} aplicado: ${rate * 100}% de descuento.`;
+
+                message.className =
+                    "cp-msg cp-success";
+            }
+        }
+
+
+        if (typeof setLanguage === "function") {
+
+            setLanguage(
+                localStorage.getItem("sais_lang") || "es"
+            );
+        }
+    }
+
+
+    createCouponBox();
     updateCouponDiscount();
 
 
@@ -1465,7 +1441,6 @@ document.addEventListener("DOMContentLoaded", () => {
             u: "/contactos",
             k: "contacto correo teléfono"
         }
-
     ];
 
 
@@ -1474,10 +1449,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return String(text)
             .toLowerCase()
             .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
+            .replace(/[\u0300-\u036f]/g, "");
     }
 
 
@@ -1493,10 +1465,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         const overlay =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
         overlay.id =
             "site-search";
@@ -1554,37 +1523,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     </div>
 
-
                     <div
                         id="search-results"
                         class="
                             max-h-[420px]
                             overflow-auto
                         "
-                    >
-
-                        <p
-                            class="
-                                p-5
-                                text-sm
-                                text-gray-500
-                            "
-                        >
-                            Escribe para buscar.
-                        </p>
-
-                    </div>
+                    ></div>
 
                 </div>
 
             </div>
-
         `;
 
 
-        document.body.appendChild(
-            overlay
-        );
+        document.body.appendChild(overlay);
 
 
         const input =
@@ -1599,9 +1552,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        function renderResults(
-            query
-        ) {
+        function renderResults(query) {
 
             const normalized =
                 normalizeText(query);
@@ -1610,17 +1561,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!normalized) {
 
                 results.innerHTML = `
-
-                    <p
-                        class="
-                            p-5
-                            text-sm
-                            text-gray-500
-                        "
-                    >
+                    <p class="p-5 text-sm text-gray-500">
                         Escribe para buscar.
                     </p>
-
                 `;
 
                 return;
@@ -1628,35 +1571,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const found =
-                INDEX.filter(
-                    item => {
+                INDEX.filter(item => {
 
-                        const text =
-                            normalizeText(
-                                `${item.t} ${item.d} ${item.k}`
-                            );
-
-                        return text.includes(
-                            normalized
+                    const text =
+                        normalizeText(
+                            `${item.t} ${item.d} ${item.k}`
                         );
-                    }
-                );
+
+                    return text.includes(
+                        normalized
+                    );
+                });
 
 
             if (!found.length) {
 
                 results.innerHTML = `
-
-                    <p
-                        class="
-                            p-5
-                            text-sm
-                            text-gray-500
-                        "
-                    >
+                    <p class="p-5 text-sm text-gray-500">
                         No encontramos resultados.
                     </p>
-
                 `;
 
                 return;
@@ -1664,73 +1597,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             results.innerHTML =
-                found.map(
-                    item => `
+                found.map(item => `
 
-                        <a
-                            href="${item.u}"
+                    <a
+                        href="${item.u}"
+                        class="
+                            block
+                            px-5
+                            py-4
+                            border-b
+                            border-gray-100
+                            hover:bg-[#e8f4ee]
+                        "
+                    >
+
+                        <strong
                             class="
                                 block
-                                px-5
-                                py-4
-                                border-b
-                                border-gray-100
-                                hover:bg-[#e8f4ee]
+                                text-[#165449]
                             "
                         >
+                            ${escapeHTML(item.t)}
+                        </strong>
 
-                            <strong
-                                class="
-                                    block
-                                    text-[#165449]
-                                "
-                            >
-                                ${item.t}
-                            </strong>
+                        <small
+                            class="text-[#6b7e78]"
+                        >
+                            ${escapeHTML(item.d)}
+                        </small>
 
-                            <small
-                                class="
-                                    text-[#6b7e78]
-                                "
-                            >
-                                ${item.d}
-                            </small>
+                    </a>
 
-                        </a>
-
-                    `
-                ).join("");
+                `).join("");
         }
 
 
-        input.addEventListener(
+        input?.addEventListener(
             "input",
-            () => {
-
-                renderResults(
-                    input.value
-                );
-
-            }
+            () => renderResults(input.value)
         );
 
 
         overlay.addEventListener(
             "click",
-            (event) => {
+            event => {
 
                 if (
                     event.target.id ===
                     "search-bg"
                 ) {
-
                     overlay.remove();
                 }
             }
         );
 
 
-        input.focus();
+        input?.focus();
     }
 
 
@@ -1751,13 +1673,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener(
         "keydown",
-        (event) => {
+        event => {
 
             if (
-                (event.ctrlKey ||
-                    event.metaKey) &&
-                event.key.toLowerCase() ===
-                    "k"
+                (event.ctrlKey || event.metaKey) &&
+                event.key.toLowerCase() === "k"
             ) {
 
                 event.preventDefault();
@@ -1781,23 +1701,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            if (
-                event.key === "Escape"
-            ) {
+            if (event.key === "Escape") {
 
-                const search =
-                    document.getElementById(
-                        "site-search"
-                    );
-
-                if (search) {
-
-                    search.remove();
-                }
+                document
+                    .getElementById("site-search")
+                    ?.remove();
 
                 closeMiniCart();
             }
-
         }
     );
 
@@ -1808,90 +1719,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const RULES = {
 
-        "buyer-name": (value) => {
-
-            return value.trim().length >= 3
+        "buyer-name": value =>
+            value.trim().length >= 3
                 ? true
-                : "Escribe tu nombre completo.";
-        },
+                : "Escribe tu nombre completo.",
 
-
-        "buyer-email": (value) => {
-
-            return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-                .test(value)
+        "buyer-email": value =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
                 ? true
-                : "Correo no válido.";
-        },
+                : "Correo no válido.",
 
-
-        "buyer-phone": (value) => {
-
-            return /^9\d{8}$/
-                .test(
-                    value.replace(
-                        /\s/g,
-                        ""
-                    )
-                )
+        "buyer-phone": value =>
+            /^9\d{8}$/.test(
+                value.replace(/\s/g, "")
+            )
                 ? true
-                : "Celular peruano de 9 dígitos.";
-        },
+                : "Celular peruano de 9 dígitos.",
 
-
-        "buyer-address": (value) => {
-
-            return value.trim().length >= 6
+        "buyer-address": value =>
+            value.trim().length >= 6
                 ? true
-                : "Ingresa una dirección más completa.";
-        },
+                : "Ingresa una dirección más completa.",
 
-
-        "buyer-district": (value) => {
-
-            return value.trim().length >= 3
+        "buyer-district": value =>
+            value.trim().length >= 3
                 ? true
-                : "Ingresa el distrito.";
-        },
+                : "Ingresa el distrito.",
 
-
-        "buyer-city": (value) => {
-
-            return value.trim().length >= 3
+        "buyer-city": value =>
+            value.trim().length >= 3
                 ? true
-                : "Ingresa la ciudad.";
-        },
+                : "Ingresa la ciudad.",
 
-
-        "contact-subject": (value) => {
-
-            return value.trim().length >= 4
+        "contact-subject": value =>
+            value.trim().length >= 4
                 ? true
-                : "El asunto es muy corto.";
-        },
+                : "El asunto es muy corto.",
 
-
-        "contact-message": (value) => {
-
-            return value.trim().length >= 10
+        "contact-message": value =>
+            value.trim().length >= 10
                 ? true
-                : "Cuéntanos un poco más.";
-        }
-
+                : "Cuéntanos un poco más."
     };
 
 
-    function validateField(
-        element
-    ) {
+    function validateField(element) {
 
         const rule =
             RULES[element.id];
 
-
-        if (!rule) {
-            return true;
-        }
+        if (!rule) return true;
 
 
         const result =
@@ -1899,10 +1776,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         let error =
-            element.parentElement
-                ?.querySelector(
-                    `.fv-error[data-for="${element.id}"]`
-                );
+            element.parentElement?.querySelector(
+                `.fv-error[data-for="${element.id}"]`
+            );
 
 
         if (result === true) {
@@ -1910,6 +1786,7 @@ document.addEventListener("DOMContentLoaded", () => {
             element.classList.remove(
                 "fv-invalid"
             );
+
 
             if (
                 element.value.trim() !== ""
@@ -1921,11 +1798,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            if (error) {
-
-                error.remove();
-            }
-
+            error?.remove();
 
             return true;
         }
@@ -1943,9 +1816,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!error) {
 
             error =
-                document.createElement(
-                    "p"
-                );
+                document.createElement("p");
 
             error.className =
                 "fv-error";
@@ -1965,54 +1836,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    Object.keys(
-        RULES
-    ).forEach(
-        (id) => {
+    Object.keys(RULES).forEach(id => {
 
-            const element =
-                document.getElementById(
-                    id
-                );
+        const element =
+            document.getElementById(id);
+
+        if (!element) return;
 
 
-            if (!element) {
-                return;
+        element.addEventListener(
+            "blur",
+            () => validateField(element)
+        );
+
+
+        element.addEventListener(
+            "input",
+            () => {
+
+                if (
+                    element.classList.contains(
+                        "fv-invalid"
+                    )
+                ) {
+                    validateField(element);
+                }
             }
-
-
-            element.addEventListener(
-                "blur",
-                () => {
-
-                    validateField(
-                        element
-                    );
-
-                }
-            );
-
-
-            element.addEventListener(
-                "input",
-                () => {
-
-                    if (
-                        element.classList.contains(
-                            "fv-invalid"
-                        )
-                    ) {
-
-                        validateField(
-                            element
-                        );
-                    }
-
-                }
-            );
-
-        }
-    );
+        );
+    });
 
 
     /* ==========================================================
@@ -2029,28 +1880,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const max = 500;
 
-
-        messageArea.maxLength =
-            max;
+        messageArea.maxLength = max;
 
 
         const counter =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
         counter.className =
             "fv-counter";
-
 
         counter.textContent =
             `0 / ${max}`;
 
 
-        messageArea.after(
-            counter
-        );
+        messageArea.after(counter);
 
 
         messageArea.addEventListener(
@@ -2059,7 +1902,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 counter.textContent =
                     `${messageArea.value.length} / ${max}`;
-
             }
         );
     }
@@ -2071,31 +1913,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener(
         "submit",
-        (event) => {
+        event => {
 
             const fields =
                 [
                     ...event.target.querySelectorAll(
-                        "input[id], textarea[id]"
+                        "input[id], textarea[id], select[id]"
                     )
                 ].filter(
-                    field =>
-                        RULES[field.id]
+                    field => RULES[field.id]
                 );
 
 
             const invalidFields =
                 fields.filter(
                     field =>
-                        !validateField(
-                            field
-                        )
+                        !validateField(field)
                 );
 
 
-            if (
-                invalidFields.length
-            ) {
+            if (invalidFields.length) {
 
                 event.preventDefault();
 
@@ -2103,7 +1940,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 invalidFields[0].focus();
             }
-
         },
         true
     );
@@ -2114,18 +1950,12 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================== */
 
     const progress =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     progress.className =
         "scroll-progress";
 
-
-    document.body.appendChild(
-        progress
-    );
+    document.body.appendChild(progress);
 
 
     function updateProgress() {
@@ -2133,18 +1963,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const scrollTop =
             window.scrollY;
 
+
         const documentHeight =
-            document.documentElement
-                .scrollHeight -
+            document.documentElement.scrollHeight -
             window.innerHeight;
 
 
         const percentage =
             documentHeight > 0
-                ? (
-                    scrollTop /
-                    documentHeight
-                ) * 100
+                ? (scrollTop / documentHeight) * 100
                 : 0;
 
 
@@ -2167,18 +1994,14 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================== */
 
     const backTop =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
 
     backTop.className =
         "back-top";
 
-
     backTop.innerHTML =
         "↑";
-
 
     backTop.setAttribute(
         "aria-label",
@@ -2195,9 +2018,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "scroll",
         () => {
 
-            if (
-                window.scrollY > 500
-            ) {
+            if (window.scrollY > 500) {
 
                 backTop.classList.add(
                     "show"
@@ -2209,7 +2030,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     "show"
                 );
             }
-
         }
     );
 
@@ -2219,13 +2039,9 @@ document.addEventListener("DOMContentLoaded", () => {
         () => {
 
             window.scrollTo({
-
                 top: 0,
-
                 behavior: "smooth"
-
             });
-
         }
     );
 
@@ -2246,19 +2062,15 @@ document.addEventListener("DOMContentLoaded", () => {
             element.classList.add(
                 "reveal-item"
             );
-
         }
     );
 
 
-    if (
-        "IntersectionObserver"
-        in window
-    ) {
+    if ("IntersectionObserver" in window) {
 
         const observer =
             new IntersectionObserver(
-                (entries) => {
+                entries => {
 
                     entries.forEach(
                         entry => {
@@ -2275,10 +2087,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                     entry.target
                                 );
                             }
-
                         }
                     );
-
                 },
                 {
                     threshold: 0.12
@@ -2288,9 +2098,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         revealElements.forEach(
             element =>
-                observer.observe(
-                    element
-                )
+                observer.observe(element)
         );
 
     } else {
@@ -2302,5 +2110,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 )
         );
     }
+
 
 });

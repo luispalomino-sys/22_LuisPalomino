@@ -29,6 +29,7 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='css/tailwind.css') }}"
     >
+
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/features.css') }}"
@@ -216,7 +217,7 @@
                 </nav>
 
 
-                <!-- ICONOS CON ANIMACIÓN EN EL CARRITO -->
+                <!-- ICONOS CON ANIMACIÓN -->
 
                 <div
                     class="
@@ -228,7 +229,7 @@
                     "
                 >
 
-                    <!-- Buscar -->
+                    <!-- BUSCAR -->
                     <button
                         type="button"
                         id="search-button"
@@ -263,7 +264,37 @@
                     </button>
 
 
+                    <!-- ================================================= -->
+                    <!-- BOTÓN DE IDIOMA -->
+                    <!-- ================================================= -->
+
+                    <button
+                        type="button"
+                        id="lang-toggle-btn"
+                        class="
+                            w-9
+                            h-9
+                            flex
+                            items-center
+                            justify-center
+                            rounded-full
+                            text-white
+                            hover:bg-white/10
+                            transition
+                            font-semibold
+                            text-sm
+                        "
+                        aria-label="Cambiar idioma"
+                        title="Cambiar idioma"
+                    >
+                        EN
+                    </button>
+
+
+                    <!-- ================================================= -->
                     <!-- CARRO -->
+                    <!-- ================================================= -->
+
                     <a
                         href="{{ url_for('main.compra') }}"
                         class="
@@ -327,7 +358,10 @@
                     </a>
 
 
+                    <!-- ================================================= -->
                     <!-- PERSONA -->
+                    <!-- ================================================= -->
+
                     <a
                         href="{{ url_for('main.contactos') }}"
                         class="
@@ -364,7 +398,9 @@
                     </a>
 
 
-                    <!-- BOTON MOBILE -->
+                    <!-- ================================================= -->
+                    <!-- BOTÓN MOBILE -->
+                    <!-- ================================================= -->
 
                     <button
                         type="button"
@@ -665,9 +701,21 @@
     </footer>
 
 
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================================================= -->
+
+    <!-- TRADUCCIONES -->
+    <script
+        src="{{ url_for('static', filename='js/i18n.js') }}"
+    ></script>
+
+    <!-- FUNCIONES PRINCIPALES -->
     <script
         src="{{ url_for('static', filename='js/main.js') }}"
     ></script>
+
+    <!-- CARRITO Y FUNCIONALIDADES -->
     <script
         src="{{ url_for('static', filename='js/features.js') }}"
     ></script>
