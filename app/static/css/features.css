@@ -1,0 +1,693 @@
+/* ==========================================================
+ FEATURES.CSS
+ Funcionalidades existentes + nuevo rediseño + Soporte Idiomas
+ ========================================================== */
+
+/* ==========================================================
+ 0. BOTÓN DE IDIOMA (Header)
+ ========================================================== */
+#lang-toggle-btn {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ border: 1.5px solid #a9e6a1;
+ color: #a9e6a1;
+ background: transparent;
+ font-weight: 700;
+ letter-spacing: 0.05em;
+ padding: 4px 12px;
+ border-radius: 9999px;
+ transition: all 0.2s ease-in-out;
+ cursor: pointer;
+ font-size: 0.75rem;
+ line-height: 1;
+}
+
+#lang-toggle-btn:hover {
+ background-color: #17624f;
+ color: #ffffff;
+ border-color: #17624f;
+ transform: translateY(-1px);
+ box-shadow: 0 4px 12px rgba(169, 230, 161, 0.2);
+}
+
+/* ==========================================================
+ 1. BUSCADOR GLOBAL
+ ========================================================== */
+.sf-overlay {
+ position: fixed;
+ inset: 0;
+ z-index: 200;
+ background: rgba(6, 63, 53, .6);
+ backdrop-filter: blur(3px);
+ display: none;
+ align-items: flex-start;
+ justify-content: center;
+ padding: 12vh 16px 16px;
+}
+.sf-overlay.open {
+ display: flex;
+}
+.sf-box {
+ width: 100%;
+ max-width: 560px;
+ background: #fff;
+ border-radius: 16px;
+ box-shadow: 0 25px 60px rgba(0, 0, 0, .35);
+ overflow: hidden;
+}
+.sf-box input {
+ width: 100%;
+ padding: 18px 20px;
+ font-size: 1.05rem;
+ border: 0;
+ border-bottom: 1px solid #e3ebe8;
+ outline: none;
+}
+.sf-list {
+ max-height: 50vh;
+ overflow: auto;
+ margin: 0;
+ padding: 6px;
+ list-style: none;
+}
+.sf-item a {
+ display: block;
+ padding: 10px 14px;
+ border-radius: 10px;
+ color: #165449;
+ text-decoration: none;
+}
+.sf-item small {
+ display: block;
+ color: #6b7e78;
+}
+.sf-item.active a,
+.sf-item a:hover {
+ background: #e8f4ee;
+}
+.sf-item mark {
+ background: #a9e6a1;
+ border-radius: 3px;
+ padding: 0 2px;
+}
+.sf-empty,
+.sf-hint {
+ padding: 16px 20px;
+ color: #6b7e78;
+ font-size: .85rem;
+}
+
+/* ==========================================================
+ 2. MINI-CARRITO
+ ========================================================== */
+.mc-overlay {
+ position: fixed;
+ inset: 0;
+ z-index: 150;
+ background: rgba(0, 0, 0, .45);
+ opacity: 0;
+ pointer-events: none;
+ transition: .25s;
+}
+.mc-overlay.open {
+ opacity: 1;
+ pointer-events: auto;
+}
+.mc-panel {
+ position: fixed;
+ top: 0;
+ right: 0;
+ height: 100%;
+ width: min(390px, 92vw);
+ z-index: 160;
+ background: #fff;
+ box-shadow: -10px 0 40px rgba(0, 0, 0, .25);
+ transform: translateX(100%);
+ transition: transform .3s ease;
+ display: flex;
+ flex-direction: column;
+}
+.mc-panel.open {
+ transform: translateX(0);
+}
+.mc-head {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 18px 20px;
+ background: #063f35;
+ color: #fff;
+ font-weight: 700;
+}
+.mc-head button {
+ background: none;
+ border: 0;
+ color: #fff;
+ font-size: 1.6rem;
+ cursor: pointer;
+ line-height: 1;
+}
+.mc-body {
+ flex: 1;
+ overflow: auto;
+ padding: 14px 20px;
+}
+.mc-row {
+ display: flex;
+ gap: 12px;
+ align-items: center;
+ padding: 10px 0;
+ border-bottom: 1px solid #eef3f1;
+}
+.mc-row img {
+ width: 54px;
+ height: 54px;
+ border-radius: 10px;
+ object-fit: cover;
+}
+.mc-row div {
+ flex: 1;
+ font-size: .9rem;
+ color: #165449;
+}
+.mc-row small {
+ color: #6b7e78;
+}
+.mc-row button {
+ background: none;
+ border: 0;
+ color: #d33;
+ cursor: pointer;
+ font-size: .75rem;
+}
+.mc-foot {
+ padding: 16px 20px;
+ border-top: 1px solid #e3ebe8;
+}
+.mc-foot .mc-total {
+ display: flex;
+ justify-content: space-between;
+ font-weight: 700;
+ margin-bottom: 12px;
+ color: #165449;
+}
+.mc-go {
+ display: block;
+ text-align: center;
+ background: #17624f;
+ color: #fff;
+ padding: 12px;
+ border-radius: 999px;
+ font-weight: 700;
+ text-decoration: none;
+}
+.mc-empty {
+ text-align: center;
+ color: #6b7e78;
+ padding: 40px 0;
+}
+
+/* ==========================================================
+ 3. CUPÓN
+ ========================================================== */
+.cp-box {
+ margin-top: 14px;
+ padding-top: 14px;
+ border-top: 1px dashed #cfdcd7;
+}
+.cp-row {
+ display: flex;
+ gap: 8px;
+}
+.cp-row input {
+ flex: 1;
+ border: 1px solid #d9e2df;
+ border-radius: 8px;
+ padding: 9px 12px;
+ text-transform: uppercase;
+ outline: none;
+}
+.cp-row input:focus {
+ border-color: #397d6c;
+}
+.cp-row button {
+ background: #17624f;
+ color: #fff;
+ border: 0;
+ border-radius: 8px;
+ padding: 0 16px;
+ font-weight: 600;
+ cursor: pointer;
+}
+.cp-msg {
+ font-size: .78rem;
+ margin-top: 6px;
+}
+.cp-msg.ok {
+ color: #17624f;
+}
+.cp-msg.err {
+ color: #c62828;
+}
+
+/* ==========================================================
+ 4. VALIDACIÓN
+ ========================================================== */
+.fv-error {
+ color: #c62828;
+ font-size: .75rem;
+ margin-top: 4px;
+}
+.fv-invalid {
+ border-color: #c62828 !important;
+ box-shadow: 0 0 0 3px rgba(198, 40, 40, .1) !important;
+}
+.fv-valid {
+ border-color: #2e9e6b !important;
+}
+.fv-counter {
+ font-size: .72rem;
+ color: #6b7e78;
+ text-align: right;
+ margin-top: 2px;
+}
+
+/* ==========================================================
+ 5. PROGRESO + VOLVER ARRIBA
+ ========================================================== */
+#scroll-progress {
+ position: fixed;
+ top: 0;
+ left: 0;
+ height: 3px;
+ width: 0;
+ background: #a9e6a1;
+ z-index: 300;
+ transition: width .1s;
+}
+#back-to-top {
+ position: fixed;
+ left: 20px;
+ bottom: 24px;
+ z-index: 90;
+ width: 44px;
+ height: 44px;
+ border-radius: 50%;
+ border: 0;
+ background: #17624f;
+ color: #fff;
+ font-size: 1.2rem;
+ cursor: pointer;
+ box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+ opacity: 0;
+ pointer-events: none;
+ transform: translateY(10px);
+ transition: .25s;
+}
+#back-to-top.show {
+ opacity: 1;
+ pointer-events: auto;
+ transform: none;
+}
+
+/* ==========================================================
+ 6. REVEAL
+ ========================================================== */
+.rv {
+ opacity: 0;
+ transform: translateY(24px);
+ transition: opacity .6s ease, transform .6s ease;
+}
+.rv.in {
+ opacity: 1;
+ transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+ .rv {
+ opacity: 1;
+ transform: none;
+ transition: none;
+ }
+}
+
+/* ==========================================================
+ 7. REDISEÑO GENERAL DE PRODUCTOS
+ ========================================================== */
+body:has(.cuy-experience) {
+ background: #f7faf8;
+}
+body:has(.cuy-experience) main {
+ background: #f7faf8;
+}
+body:has(.cuy-experience) main > section:nth-of-type(2) {
+ background: transparent;
+}
+body:has(.cuy-experience) main article#cuy,
+body:has(.cuy-experience) main article:not(#cuy) {
+ position: relative;
+ background: #ffffff;
+ border: 1px solid #e4eee9;
+ border-radius: 28px;
+ padding: 32px;
+ margin-bottom: 28px;
+ box-shadow: 0 15px 40px rgba(22, 84, 73, .07);
+ transition: transform .3s ease, box-shadow .3s ease;
+}
+body:has(.cuy-experience) main article#cuy:hover,
+body:has(.cuy-experience) main article:not(#cuy):hover {
+ transform: translateY(-5px);
+ box-shadow: 0 20px 50px rgba(22, 84, 73, .12);
+}
+body:has(.cuy-experience) main article img {
+ transition: transform .5s ease;
+}
+body:has(.cuy-experience) main article:hover img {
+ transform: scale(1.04);
+}
+
+/* ==========================================================
+ 8. EXPERIENCIA DEL CUY
+ ========================================================== */
+.cuy-experience {
+ position: relative;
+ overflow: hidden;
+ background:
+ radial-gradient(
+ circle at top right,
+ rgba(113, 201, 106, .20),
+ transparent 35%
+ ),
+ linear-gradient(
+ 135deg,
+ #eff8f1,
+ #ffffff 60%
+ );
+ border-top: 1px solid #e2eee8;
+}
+.cuy-experience::before {
+ content: "🐹";
+ position: absolute;
+ right: 5%;
+ top: 25px;
+ font-size: 5rem;
+ opacity: .08;
+ pointer-events: none;
+}
+.cuy-experience-header {
+ max-width: 760px;
+ margin: 0 auto 45px;
+ text-align: center;
+}
+.cuy-experience-header span {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ padding: 7px 14px;
+ border-radius: 999px;
+ background: #dff2dc;
+ color: #17624f;
+ font-size: .78rem;
+ font-weight: 700;
+ letter-spacing: .04em;
+ text-transform: uppercase;
+ margin-bottom: 14px;
+}
+.cuy-experience-header h2 {
+ font-family: Georgia, "Times New Roman", serif;
+ color: #165449;
+ font-size: clamp(2rem, 4vw, 3.5rem);
+ line-height: 1.05;
+ margin-bottom: 14px;
+}
+.cuy-experience-header p {
+ color: #60766f;
+ line-height: 1.7;
+ max-width: 650px;
+ margin: 0 auto;
+}
+.cuy-experience-grid {
+ display: grid;
+ grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+ gap: 35px;
+ align-items: stretch;
+}
+.cuy-gallery {
+ display: grid;
+ grid-template-columns: 1.25fr .75fr;
+ grid-template-rows: 1fr 1fr;
+ gap: 14px;
+ min-height: 500px;
+}
+.cuy-gallery-item {
+ overflow: hidden;
+ border-radius: 22px;
+ box-shadow: 0 12px 30px rgba(22, 84, 73, .12);
+}
+.cuy-gallery-item:first-child {
+ grid-row: span 2;
+}
+.cuy-gallery-item img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ transition: transform .6s ease;
+}
+.cuy-gallery-item:hover img {
+ transform: scale(1.06);
+}
+.cuy-fact-card {
+ background: #ffffff;
+ border: 1px solid #deebe5;
+ border-radius: 28px;
+ padding: 28px;
+ box-shadow: 0 18px 45px rgba(22, 84, 73, .09);
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+}
+.cuy-fact-image-wrap {
+ height: 210px;
+ border-radius: 20px;
+ overflow: hidden;
+ margin-bottom: 22px;
+}
+.cuy-fact-image-wrap img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ transition: transform .5s ease;
+}
+.cuy-fact-card:hover .cuy-fact-image-wrap img {
+ transform: scale(1.04);
+}
+.cuy-fact-category {
+ display: inline-flex;
+ width: fit-content;
+ padding: 6px 12px;
+ border-radius: 999px;
+ background: #e8f4ee;
+ color: #17624f;
+ font-size: .75rem;
+ font-weight: 700;
+ margin-bottom: 12px;
+}
+.cuy-fact-card h3 {
+ font-family: Georgia, "Times New Roman", serif;
+ color: #165449;
+ font-size: 1.8rem;
+ line-height: 1.15;
+ margin-bottom: 12px;
+}
+.cuy-fact-card p {
+ color: #60766f;
+ line-height: 1.7;
+}
+.cuy-filter {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ margin: 24px 0;
+}
+.cuy-filter button {
+ border: 1px solid #cfe0d9;
+ background: #ffffff;
+ color: #397d6c;
+ padding: 8px 13px;
+ border-radius: 999px;
+ font-size: .78rem;
+ font-weight: 700;
+ cursor: pointer;
+ transition: .2s ease;
+}
+.cuy-filter button:hover,
+.cuy-filter button.active {
+ background: #17624f;
+ color: #ffffff;
+ border-color: #17624f;
+}
+.cuy-random-button {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 8px;
+ width: 100%;
+ border: 0;
+ border-radius: 14px;
+ padding: 13px 18px;
+ background: #71c96a;
+ color: #ffffff;
+ font-weight: 700;
+ cursor: pointer;
+ transition: .25s ease;
+ box-shadow: 0 8px 20px rgba(113, 201, 106, .25);
+}
+.cuy-random-button:hover {
+ background: #5db656;
+ transform: translateY(-2px);
+}
+.cuy-fact-change {
+ animation: cuyFactChange .45s ease;
+}
+@keyframes cuyFactChange {
+ 0% {
+ opacity: .35;
+ transform: translateY(8px);
+ }
+ 100% {
+ opacity: 1;
+ transform: translateY(0);
+ }
+}
+
+/* ==========================================================
+ 9. REDISEÑO DE COMPRA
+ ========================================================== */
+body:has(#purchase-step-1) {
+ background: #f5f9f6;
+}
+body:has(#purchase-step-1) main {
+ background: #f5f9f6;
+}
+body:has(#purchase-step-1) #purchase-step-1 > div,
+body:has(#purchase-step-1) #purchase-step-2 > div,
+body:has(#purchase-step-1) #purchase-step-3 > div,
+body:has(#purchase-success) #purchase-success > div {
+ box-shadow: 0 15px 45px rgba(22, 84, 73, .08);
+ border-color: #deebe5;
+}
+body:has(#purchase-step-1) table tbody tr {
+ transition: background .2s ease;
+}
+body:has(#purchase-step-1) table tbody tr:hover {
+ background: #f5faf7;
+}
+body:has(#purchase-step-1) [data-plus-product],
+body:has(#purchase-step-1) [data-minus-product] {
+ transition: .2s ease;
+}
+body:has(#purchase-step-1) [data-plus-product]:hover,
+body:has(#purchase-step-1) [data-minus-product]:hover {
+ transform: scale(1.08);
+}
+body:has(#purchase-step-1) .purchase-step-indicator span {
+ box-shadow: 0 6px 18px rgba(23, 98, 79, .12);
+}
+body:has(#purchase-step-1) .purchase-step-indicator.active span {
+ transform: scale(1.08);
+}
+body:has(#purchase-step-1) input.form-input,
+body:has(#purchase-step-1) select.form-input,
+body:has(#purchase-step-1) textarea.form-input {
+ border-radius: 12px;
+ transition: .25s ease;
+}
+body:has(#purchase-step-1) input.form-input:focus,
+body:has(#purchase-step-1) select.form-input:focus,
+body:has(#purchase-step-1) textarea.form-input:focus {
+ transform: translateY(-1px);
+}
+
+/* ==========================================================
+ 10. REDISEÑO DE MATAHUASI
+ ========================================================== */
+body:has(img[alt="Matahuasi Junín"]) {
+ background: #f7faf8;
+}
+body:has(img[alt="Matahuasi Junín"]) main {
+ background: #f7faf8;
+}
+body:has(img[alt="Matahuasi Junín"]) main a.group {
+ background: #ffffff;
+ border: 1px solid #e1ece7;
+ box-shadow: 0 12px 30px rgba(22, 84, 73, .08);
+ transition:
+ transform .3s ease,
+ box-shadow .3s ease;
+}
+body:has(img[alt="Matahuasi Junín"]) main a.group:hover {
+ transform: translateY(-6px);
+ box-shadow: 0 20px 45px rgba(22, 84, 73, .13);
+}
+body:has(img[alt="Matahuasi Junín"]) main a.group img {
+ transition: transform .7s ease;
+}
+body:has(img[alt="Matahuasi Junín"]) main a.group:hover img {
+ transform: scale(1.07);
+}
+body:has(img[alt="Matahuasi Junín"]) main section:nth-of-type(2) {
+ background:
+ linear-gradient(
+ 180deg,
+ #ffffff 0%,
+ #f7faf8 100%
+ );
+}
+body:has(img[alt="Matahuasi Junín"]) main section:nth-of-type(2) p {
+ font-size: 1.05rem;
+}
+body:has(img[alt="Matahuasi Junín"]) main section:nth-of-type(3) h2 {
+ letter-spacing: -.02em;
+}
+
+/* ==========================================================
+ 11. RESPONSIVE
+ ========================================================== */
+@media (max-width: 900px) {
+ .cuy-experience-grid {
+ grid-template-columns: 1fr;
+ }
+ .cuy-gallery {
+ min-height: 430px;
+ }
+}
+@media (max-width: 640px) {
+ .cuy-experience {
+ padding-top: 55px;
+ padding-bottom: 55px;
+ }
+ .cuy-gallery {
+ grid-template-columns: 1fr 1fr;
+ min-height: 350px;
+ gap: 8px;
+ }
+ .cuy-gallery-item {
+ border-radius: 15px;
+ }
+ .cuy-fact-card {
+ border-radius: 20px;
+ padding: 20px;
+ }
+ .cuy-fact-image-wrap {
+ height: 180px;
+ border-radius: 15px;
+ }
+ .cuy-fact-card h3 {
+ font-size: 1.5rem;
+ }
+ body:has(.cuy-experience) main article#cuy,
+ body:has(.cuy-experience) main article:not(#cuy) {
+ padding: 22px;
+ border-radius: 20px;
+ }
+}
