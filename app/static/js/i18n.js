@@ -178,6 +178,10 @@ const translations = {
     "nav.buy": "Cart",
     "nav.menu": "Menu",
     "footer.title": "Agricultural Cooperative\nAgricultural Producers\nof Central Peru",
+    "footer.brand1": "Cooperativa Agraria",
+    "footer.brand2": "Productores Agropecuarios",
+    "footer.brand3": "del Centro del Perú",
+    "footer.copyright": "© 2026 Cooperativa Agraria Productores Agropecuarios del Centro del Perú",
 
     // Hero / Home
     "hero.subtitle": "Cooperativas Sais",
