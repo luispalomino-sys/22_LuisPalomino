@@ -348,12 +348,28 @@ body:has(.cuy-experience) main article:not(#cuy) {
  position: relative;
  background: #ffffff;
  border: 1px solid #e4eee9;
- border-radius: 28px;
- padding: 32px;
- margin-bottom: 28px;
+ border-radius: 20px;
+ padding: 16px;
+ margin-bottom: 16px;
  box-shadow: 0 15px 40px rgba(22, 84, 73, .07);
  transition: transform .3s ease, box-shadow .3s ease;
+ }
+ /* ===== Productos compactos ===== */
+.productos-grid { display: grid; gap: 1.25rem; max-width: 900px; margin: 0 auto; }
+@media (min-width: 768px) { .productos-grid { grid-template-columns: 1fr 1fr; } }
+
+.productos-grid .product-item {
+  grid-template-columns: 1fr !important;
+  gap: .75rem !important;
+  padding: 1rem !important;
+  margin-bottom: 0 !important;
 }
+.product-image { height: 150px !important; border-radius: 16px !important; }
+.product-item h2 { font-size: 1.5rem !important; }
+.product-item .text-4xl { font-size: 1.5rem !important; }
+.product-item p { font-size: .85rem !important; margin-bottom: .75rem !important; }
+.product-item a, .product-item button { padding: .45rem .9rem !important; font-size: .75rem !important; }
+
 body:has(.cuy-experience) main article#cuy:hover,
 body:has(.cuy-experience) main article:not(#cuy):hover {
  transform: translateY(-5px);
