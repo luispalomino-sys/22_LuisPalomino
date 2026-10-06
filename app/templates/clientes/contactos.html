@@ -427,8 +427,18 @@ Contactos · Cooperativas Sais Capital Social
   f1.addEventListener('submit', e => { e.preventDefault(); setStep(2); });
   $('btn-back-step').addEventListener('click', () => setStep(1));
 
+let enviando = false;
+
 f2.addEventListener('submit', async e => {
     e.preventDefault();
+
+    if (enviando) return;
+
+    enviando = true;
+
+    const botonEnviar = f2.querySelector('button[type="submit"]');
+    botonEnviar.disabled = true;
+    botonEnviar.textContent = 'Enviando...';
 
     const datos = new URLSearchParams();
 
@@ -455,8 +465,12 @@ f2.addEventListener('submit', async e => {
         }
 
     } catch (error) {
-        console.error("Error:", error);
-        alert("No se pudo conectar con el servidor.");
+    console.error("Error:", error);
+    alert("No se pudo conectar con el servidor.");
+
+    enviando = false;
+    botonEnviar.disabled = false;
+    botonEnviar.textContent = 'Enviar mensaje';
     }
 });
 })();
