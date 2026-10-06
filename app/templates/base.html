@@ -702,22 +702,19 @@
         // -------------------------------------------------------------
 
         // A. PRECIOS / PRODUCTOS / COTIZACIONES / OFERTAS
-        if (query.includes('precio') || query.includes('cuanto') || query.includes('costo') || 
-            query.includes('valor') || query.includes('cotiz') || query.includes('tarifa') || 
-            query.includes('catalogo') || query.includes('venden') || query.includes('venta') || 
-            query.includes('oferta') || query.includes('kilo') || query.includes('kg') || 
-            query.includes('papa') || query.includes('lacteo') || query.includes('queso') || 
-            query.includes('variedad') || query.includes('tienen') || query.includes('a como') || 
-            query.includes('a cuanto') || query.includes('produc') || query.includes('mercad')) {
-            
-            return '🌾 <b>Lista de Precios Referenciales:</b><br>' +
-                   '• <b>Papa Nativa:</b> S/ 2.50 / kg<br>' +
-                   '• <b>Papa Canchán / Agrícola:</b> S/ 1.80 / kg<br>' +
-                   '• <b>Queso Fresco / Lácteos:</b> S/ 14.00 / unidad<br>' +
-                   '• <b>Otros productos:</b> Según disponibilidad de temporada.<br><br>' +
-                   'Ver detalle completo en <a href="{{ url_for("main.productos") }}" style="color: #063f35; font-weight: bold; text-decoration: underline;">Productos</a> o realiza tu pedido en <a href="{{ url_for("main.compra") }}" style="color: #063f35; font-weight: bold; text-decoration: underline;">Compra</a>.';
-        }
+    if (query.includes('precio') || query.includes('cuanto') || query.includes('costo') ||
+            query.includes('valor') || query.includes('cotiz') || query.includes('tarifa') ||
+            query.includes('catalogo') || query.includes('venden') || query.includes('venta') ||
+            query.includes('oferta') || query.includes('kilo') || query.includes('kg') ||
+            query.includes('cuy') || query.includes('quinua') || query.includes('variedad') ||
+            query.includes('tienen') || query.includes('a como') || query.includes('a cuanto') ||
+            query.includes('produc') || query.includes('mercad')) {
 
+            return '🌾 <b>Precios referenciales:</b><br>' +
+                   '• <b>Cuy:</b> S/ 35.00<br>' +
+                   '• <b>Quinua:</b> S/ 18.00<br><br>' +
+                   'Ver detalle en <a href="{{ url_for("main.productos") }}" style="color: #063f35; font-weight: bold; text-decoration: underline;">Productos</a> o realiza tu pedido en <a href="{{ url_for("main.compra") }}" style="color: #063f35; font-weight: bold; text-decoration: underline;">Compra</a>.';
+            }
         // B. UBICACIÓN / LOCAL / DÓNDE QUEDAN
         else if (query.includes('matahuasi') || query.includes('donde') || query.includes('ubicacion') || 
                  query.includes('direccion') || query.includes('quedan') || query.includes('llegar') || 
@@ -813,8 +810,6 @@
             messages.scrollTop = messages.scrollHeight;
         }, 1000);
     }
-</script>
- // tu código actual del chatbot...
 </script>
 
 <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>

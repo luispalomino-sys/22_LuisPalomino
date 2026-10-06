@@ -1717,7 +1717,21 @@ document.addEventListener("DOMContentLoaded", () => {
        VALIDACIÓN DE FORMULARIOS
        ========================================================== */
 
-    const RULES = {
+const RULES = {
+         "contact-name": value =>
+            /^\p{L}[\p{L}\s'.-]{2,}$/u.test(value.trim())
+                ? true
+                : "Escribe tu nombre completo (solo letras).",
+
+        "contact-email": value =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
+                ? true
+                : "Correo no válido.",
+
+        "contact-phone": value =>
+            value.trim() === "" || /^9\d{8}$/.test(value.replace(/\s/g, ""))
+                ? true
+                : "Celular de 9 dígitos que empiece con 9.",
 
         "buyer-name": value =>
             value.trim().length >= 3
@@ -1728,7 +1742,7 @@ document.addEventListener("DOMContentLoaded", () => {
             /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
                 ? true
                 : "Correo no válido.",
-
+                
         "buyer-phone": value =>
             /^9\d{8}$/.test(
                 value.replace(/\s/g, "")
