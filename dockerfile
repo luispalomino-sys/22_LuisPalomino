@@ -2,13 +2,12 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-COPY mi-proyecto/requirements.txt .
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY mi-proyecto/app.py .
-
-COPY mi-proyecto/app ./app
+COPY app.py .
+COPY app ./app
 
 EXPOSE 5000
 
