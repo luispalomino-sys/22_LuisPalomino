@@ -77,6 +77,7 @@ Contactos · Cooperativas Sais Capital Social
         <form
             id="contact-form-step-1"
             class="space-y-6"
+            novalidate
         >
 
             <div>
@@ -112,6 +113,7 @@ Contactos · Cooperativas Sais Capital Social
 
                 <input
                     id="contact-name"
+                    name="nombre"
                     type="text"
                     required
                     class="form-input"
@@ -121,11 +123,9 @@ Contactos · Cooperativas Sais Capital Social
 
             </div>
 
-
             <!-- EMAIL -->
 
             <div>
-
                 <label
                     for="contact-email"
                     class="block text-sm font-semibold mb-2"
@@ -136,6 +136,7 @@ Contactos · Cooperativas Sais Capital Social
 
                 <input
                     id="contact-email"
+                    name="correo"
                     type="email"
                     required
                     class="form-input"
@@ -160,12 +161,15 @@ Contactos · Cooperativas Sais Capital Social
 
                 <input
                     id="contact-phone"
+                    name="telefono"
                     type="tel"
+                    maxlength="9"
+                    inputmode="numeric"
+                    oninput="this.value = this.value.replace(/\D/g, '')"
                     class="form-input"
                     placeholder="Tu número de teléfono"
                     data-i18n-placeholder="contact.ph_phone"
-                >
-
+                    >
             </div>
 
 
@@ -190,6 +194,7 @@ Contactos · Cooperativas Sais Capital Social
         <form
             id="contact-form-step-2"
             class="space-y-6 hidden"
+            novalidate
         >
 
             <div>
@@ -228,6 +233,7 @@ Contactos · Cooperativas Sais Capital Social
 
                 <select
                     id="contact-subject"
+                    name="motivo"
                     required
                     class="form-input"
                 >
@@ -317,6 +323,7 @@ Contactos · Cooperativas Sais Capital Social
 
                 <textarea
                     id="contact-message"
+                    name="mensaje"
                     required
                     rows="6"
                     maxlength="500"
@@ -402,5 +409,56 @@ Contactos · Cooperativas Sais Capital Social
     </div>
 
 </section>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const f1 = $('contact-form-step-1'), f2 = $('contact-form-step-2');
+  const ind = [$('contact-step-1'), $('contact-step-2')];
 
+  const setStep = n => {
+    f1.classList.toggle('hidden', n !== 1);
+    f2.classList.toggle('hidden', n !== 2);
+    ind[1].classList.toggle('bg-[#166451]', n === 2);
+    ind[1].classList.toggle('text-white', n === 2);
+    ind[1].classList.toggle('bg-[#dce8e3]', n !== 2);
+    ind[1].classList.toggle('text-[#49665f]', n !== 2);
+  };
+
+  f1.addEventListener('submit', e => { e.preventDefault(); setStep(2); });
+  $('btn-back-step').addEventListener('click', () => setStep(1));
+
+f2.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const datos = new URLSearchParams();
+
+    datos.append('nombre', $('contact-name').value);
+    datos.append('correo', $('contact-email').value);
+    datos.append('telefono', $('contact-phone').value);
+    datos.append('motivo', $('contact-subject').value);
+    datos.append('mensaje', $('contact-message').value);
+
+    try {
+        const respuesta = await fetch("{{ url_for('main.contactos') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: datos
+        });
+
+        if (respuesta.ok) {
+            f2.classList.add('hidden');
+            $('contact-success').classList.remove('hidden');
+        } else {
+            alert("No se pudo enviar el mensaje.");
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("No se pudo conectar con el servidor.");
+    }
+});
+})();
+</script>
 {% endblock %}
