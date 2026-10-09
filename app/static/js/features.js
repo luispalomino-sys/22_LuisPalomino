@@ -16,6 +16,13 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const CART_KEY = "sais_cart";
+    
+    /* Traducción segura: usa i18n.js si está cargado */
+    const tx = (key, fallback, vars) => {
+        if (typeof t !== "function") return fallback;
+        const result = t(key, vars);
+        return result === key ? fallback : result;
+    };
 
     /* ==========================================================
        UTILIDADES
@@ -467,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     <img
                         src="${escapeHTML(item.image || "")}"
-                        alt="${escapeHTML(item.name)}"
+                        escapeHTML(tx("product." + item.id, item.name))
                     >
 
                     <div class="mc-row-info">

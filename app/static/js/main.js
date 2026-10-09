@@ -19,6 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================== */
 
     const CART_KEY = "sais_cart";
+    
+    /* Traducción segura: usa i18n.js si está cargado */
+    const tx = (key, fallback, vars) => {
+        if (typeof t !== "function") return fallback;
+        const result = t(key, vars);
+        return result === key ? fallback : result;
+    };
 
     const PRODUCTS = {
         cuy: {
@@ -645,7 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <p
                             class="text-[#49665f] mb-5"
                         >
-                            Tu carrito está vacío.
+                            ${tx("cart.empty", "Tu carrito está vacío.")}
                         </p>
 
                         <a
@@ -660,7 +667,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 font-semibold
                             "
                         >
-                            Ver productos
+                            ${tx("cart.view_products", "Ver productos")}
                         </a>
 
                     </td>
@@ -1136,7 +1143,19 @@ document.addEventListener("DOMContentLoaded", () => {
        NAVEGACIÓN DE COMPRA
        ========================================================== */
 
-    function setupPurchaseNavigation() {
+            window.addEventListener(
+        "sais:lang-changed",
+        () => {
+
+            renderCart();
+
+            if (document.getElementById("final-products")) {
+                renderFinalSummary();
+            }
+
+        }
+    );
+       function setupPurchaseNavigation() {
 
         const goStep2 =
             document.getElementById(

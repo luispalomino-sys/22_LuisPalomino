@@ -12,6 +12,10 @@ const translations = {
     "nav.products": "Productos",
     "nav.buy": "Compra",
     "nav.menu": "Menú",
+    "cart.view_products": "Ver productos",
+    "cuyexp.tag": "🐹 Experiencia interactiva",
+    "cuyexp.title": "Conoce nuestro Cuy",
+    "cuyexp.desc": "Más que un producto, el cuy forma parte del trabajo y la producción de nuestros socios. Explora algunas características y descubre un dato diferente cada vez.",
     "footer.title": "Cooperativa Agraria\nProductores Agropecuarios\ndel Centro del Perú",
 
     // Hero / Inicio
@@ -152,7 +156,7 @@ const translations = {
 
     // Mini Carrito
     "cart.title": "Tu carrito",
-    "cart.empty": "🛒\nTu carrito está vacío.",
+    "cart.empty": "Tu carrito está vacío.",
     "cart.subtotal": "Subtotal",
     "cart.checkout": "Ir a comprar",
     "cart.remove": "Quitar",
@@ -177,6 +181,10 @@ const translations = {
     "nav.products": "Products",
     "nav.buy": "Cart",
     "nav.menu": "Menu",
+        "cart.view_products": "View products",
+        "cuyexp.tag": "🐹 Interactive experience",
+    "cuyexp.title": "Get to know our Guinea Pig",
+    "cuyexp.desc": "More than a product, the guinea pig is part of the work and production of our members. Explore some features and discover a different fact each time.",
     "footer.title": "Agricultural Cooperative\nAgricultural Producers\nof Central Peru",
     "footer.brand1": "Cooperativa Agraria",
     "footer.brand2": "Productores Agropecuarios",
@@ -399,6 +407,23 @@ function setLanguage(lang) {
   });
 
 
+    /* Traducir aria-label y title */
+
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria");
+
+    if (translations[lang][key]) {
+      el.setAttribute("aria-label", translations[lang][key]);
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+
+    if (translations[lang][key]) {
+      el.setAttribute("title", translations[lang][key]);
+    }
+  });
   /* --------------------------------------------------------
      Actualizar botón de idioma
      
