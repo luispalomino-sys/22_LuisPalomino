@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, Response, render_template, request, redirect, url_for, flash
 from app.db import get_connection
-
 main_bp = Blueprint("main", __name__)
 
 
@@ -84,3 +83,39 @@ def contactos():
 @main_bp.route("/compra")
 def compra():
     return render_template("clientes/compra.html")
+@main_bp.route("/sitemap.xml")
+def sitemap():
+    # Páginas públicas que deben aparecer en Google.
+    # Para agregar una página nueva, añade aquí el nombre de su función.
+    paginas = [
+        "main.inicio",
+        "main.nosotros",
+        "main.conoce_matahuasi",
+        "main.productos",
+        "main.contactos",
+    ]
+
+    urls = "".join(
+        f"  <url>\n    <loc>{url_for(pagina, _external=True)}</loc>\n  </url>\n"
+        for pagina in paginas
+    )
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{urls}"
+        "</urlset>\n"
+    )
+
+    return Response(xml, mimetype="application/xml")
+
+
+@main_bp.route("/robots.txt")
+def robots():
+    texto = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        f"Sitemap: {url_for('main.sitemap', _external=True)}\n"
+    )
+
+    return Response(texto, mimetype="text/plain")
