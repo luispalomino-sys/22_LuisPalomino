@@ -707,3 +707,463 @@ body:has(img[alt="Matahuasi Junín"]) main section:nth-of-type(3) h2 {
  border-radius: 20px;
  }
 }
+
+/* ==========================================================
+   12. BUSCADOR (lupa) - arreglo
+   ========================================================== */
+#site-search #search-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 100px 16px 16px;
+    background: rgba(0, 0, 0, .5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+#site-search #search-bg > div {
+    width: 100%;
+    max-width: 36rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .35);
+    overflow: hidden;
+}
+
+#site-search #search-bg > div > div:first-child {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#site-search #search-input {
+    width: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font-size: 1.125rem;
+    color: #165449;
+}
+
+#site-search #search-results {
+    max-height: 420px;
+    overflow: auto;
+}
+
+#site-search #search-results a {
+    display: block;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f3;
+    text-decoration: none;
+}
+
+#site-search #search-results a:hover,
+#site-search #search-results a:focus-visible {
+    background: #e8f4ee;
+    outline: none;
+}
+
+#site-search #search-results strong {
+    display: block;
+    color: #165449;
+}
+
+#site-search #search-results small {
+    color: #6b7e78;
+}
+
+#site-search #search-results p {
+    padding: 20px;
+    font-size: .875rem;
+    color: #6b7280;
+}
+/* ========================================================= */
+/* MODO ALTO CONTRASTE (negro / blanco / amarillo)           */
+/* ========================================================= */
+
+body.alto-contraste {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+/* Superficies. NO toca capas absolutas/fijas ni degradados
+   (son las que van encima de las fotos del hero) */
+body.alto-contraste main,
+body.alto-contraste section,
+body.alto-contraste article,
+body.alto-contraste .bg-white:not(.slider-dot),
+body.alto-contraste .bg-gray-50,
+body.alto-contraste .bg-gray-100,
+body.alto-contraste div:not([class*="absolute"]):not([class*="fixed"]):not([class*="bg-gradient"]):not([class*="z-10"]):not([class*="text-white"]) {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+}
+
+/* Capa oscura sobre las fotos: más fuerte para que el texto se lea */
+body.alto-contraste .bg-gradient-to-r {
+    background-image: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, .88),
+        rgba(0, 0, 0, .65) 55%,
+        rgba(0, 0, 0, .25)
+    ) !important;
+}
+
+/* Textos */
+body.alto-contraste h1,
+body.alto-contraste h2,
+body.alto-contraste h3,
+body.alto-contraste h4,
+body.alto-contraste h5,
+body.alto-contraste h6,
+body.alto-contraste p,
+body.alto-contraste span,
+body.alto-contraste small,
+body.alto-contraste strong,
+body.alto-contraste label,
+body.alto-contraste li,
+body.alto-contraste td,
+body.alto-contraste th {
+    color: #fff !important;
+}
+
+/* Header y footer */
+body.alto-contraste header,
+body.alto-contraste footer {
+    background-color: #000 !important;
+    border-bottom: 2px solid #ffe600 !important;
+}
+
+/* Enlaces */
+body.alto-contraste a {
+    color: #ffe600 !important;
+}
+
+body.alto-contraste main a:not([class*="bg-["]) {
+    text-decoration: underline !important;
+}
+
+body.alto-contraste a:hover {
+    color: #fff !important;
+}
+
+/* Botones con fondo de color: amarillo con texto negro */
+body.alto-contraste a[class*="bg-["],
+body.alto-contraste button[class*="bg-["]:not(.slider-dot),
+body.alto-contraste .mc-go,
+body.alto-contraste .cp-row button,
+body.alto-contraste .cuy-random-button {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+    border: 2px solid #fff !important;
+    text-decoration: none !important;
+}
+
+body.alto-contraste a[class*="bg-["] *,
+body.alto-contraste button[class*="bg-["] *,
+body.alto-contraste .mc-go *,
+body.alto-contraste .cuy-random-button * {
+    color: #000 !important;
+}
+
+/* Puntos del slider: visibles */
+body.alto-contraste .slider-dot {
+    border: 2px solid #fff !important;
+}
+
+body.alto-contraste .slider-dot.bg-white {
+    background-color: #ffe600 !important;
+}
+
+/* Etiquetas y filtros del cuy */
+body.alto-contraste .cuy-experience-header span,
+body.alto-contraste .cuy-fact-category,
+body.alto-contraste .cuy-filter button {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+body.alto-contraste .cuy-filter button.active,
+body.alto-contraste .cuy-filter button:hover {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+}
+
+/* Formularios */
+body.alto-contraste input,
+body.alto-contraste textarea,
+body.alto-contraste select {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+body.alto-contraste ::placeholder {
+    color: #d4d4d4 !important;
+    opacity: 1;
+}
+
+/* Foco bien visible con teclado */
+body.alto-contraste :focus-visible {
+    outline: 3px solid #ffe600 !important;
+    outline-offset: 2px !important;
+}
+
+/* Mini carrito */
+body.alto-contraste .mc-panel,
+body.alto-contraste .mc-body,
+body.alto-contraste .mc-foot,
+body.alto-contraste .mc-head {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+}
+
+body.alto-contraste .mc-panel {
+    border-left: 3px solid #ffe600 !important;
+}
+
+/* Buscador (lupa) */
+body.alto-contraste #site-search #search-bg > div {
+    background-color: #000 !important;
+    border: 3px solid #ffe600 !important;
+}
+
+body.alto-contraste #site-search #search-input,
+body.alto-contraste #site-search #search-results strong,
+body.alto-contraste #site-search #search-results small,
+body.alto-contraste #site-search #search-results p {
+    color: #fff !important;
+}
+
+body.alto-contraste #site-search #search-results a {
+    border-color: #fff !important;
+}
+
+body.alto-contraste #site-search #search-results a:hover,
+body.alto-contraste #site-search #search-results a:focus-visible {
+    background-color: #ffe600 !important;
+}
+
+body.alto-contraste #site-search #search-results a:hover *,
+body.alto-contraste #site-search #search-results a:focus-visible * {
+    color: #000 !important;
+}
+
+/* ---------------------------------------------------------
+   Panel de la tuerca (más grande y legible, también en
+   modo normal)
+   --------------------------------------------------------- */
+#menu-tuerca {
+    width: 18rem;
+}
+
+#menu-tuerca p {
+    font-size: .8rem;
+}
+
+#menu-tuerca span {
+    font-size: .95rem;
+}
+
+#menu-tuerca button {
+    font-size: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+#check-contraste {
+    width: 24px;
+    height: 24px;
+}
+
+body.alto-contraste #menu-tuerca {
+    background-color: #000 !important;
+    border: 3px solid #ffe600 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .9) !important;
+}
+
+body.alto-contraste #menu-tuerca p,
+body.alto-contraste #menu-tuerca span {
+    color: #fff !important;
+}
+
+body.alto-contraste #menu-tuerca button {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+body.alto-contraste #menu-tuerca button:hover {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+}
+
+body.alto-contraste #menu-tuerca hr {
+    border-color: #fff !important;
+}
+
+body.alto-contraste #check-contraste {
+    accent-color: #ffe600;
+}
+
+/* ---------------------------------------------------------
+   Que se vean las imágenes en modo alto contraste
+   --------------------------------------------------------- */
+
+/* Quita degradados claros de fondo (cuy, matahuasi...) */
+body.alto-contraste main,
+body.alto-contraste section,
+body.alto-contraste article {
+    background-image: none !important;
+}
+
+/* Capas oscuras sobre las fotos: dejan ver la foto y dan contraste */
+body.alto-contraste div[class*="absolute"][class*="bg-black/"] {
+    background-color: rgba(0, 0, 0, .6) !important;
+}
+
+/* Texto sobre fotos: sombra negra para que se lea */
+body.alto-contraste [class*="z-10"] h1,
+body.alto-contraste [class*="z-10"] h2,
+body.alto-contraste [class*="z-10"] p,
+body.alto-contraste [class*="z-10"] span,
+body.alto-contraste [class*="text-white"] h1,
+body.alto-contraste [class*="text-white"] p {
+    text-shadow: 0 0 4px #000, 0 2px 8px #000;
+}
+
+/* Tarjetas de Conoce Matahuasi */
+body.alto-contraste a.group {
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+}
+/* ---------------------------------------------------------
+   Tablas (carrito) y pasos del pedido / contacto
+   --------------------------------------------------------- */
+
+body.alto-contraste table,
+body.alto-contraste thead,
+body.alto-contraste tbody,
+body.alto-contraste tfoot,
+body.alto-contraste tr,
+body.alto-contraste td,
+body.alto-contraste th {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+}
+
+body.alto-contraste thead th {
+    border-bottom: 2px solid #ffe600 !important;
+}
+
+body.alto-contraste table tbody tr:hover {
+    background-color: #222 !important;
+}
+
+/* Pasos de Compra: 1 - 2 - 3 */
+body.alto-contraste .purchase-step-indicator span {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 3px solid #fff !important;
+    box-shadow: none !important;
+}
+
+body.alto-contraste .purchase-step-indicator.active span {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+}
+
+body.alto-contraste .purchase-step-indicator small {
+    color: #fff !important;
+}
+
+body.alto-contraste .purchase-step-indicator.active small {
+    color: #ffe600 !important;
+}
+
+/* Líneas que unen los pasos */
+body.alto-contraste div[class~="h-1"] {
+    background-color: #fff !important;
+}
+
+/* Círculos de los pasos de Contacto (activo = amarillo) */
+body.alto-contraste div[class*="rounded-full"]:not([class*="text-white"]) {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 3px solid #fff !important;
+}
+
+body.alto-contraste div[class*="rounded-full"][class*="text-white"] {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+    border: 3px solid #fff !important;
+}
+
+/* ---------------------------------------------------------
+   Tablas (carrito) y pasos del pedido / contacto
+   --------------------------------------------------------- */
+
+body.alto-contraste table,
+body.alto-contraste thead,
+body.alto-contraste tbody,
+body.alto-contraste tfoot,
+body.alto-contraste tr,
+body.alto-contraste td,
+body.alto-contraste th {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+}
+
+body.alto-contraste thead th {
+    border-bottom: 2px solid #ffe600 !important;
+}
+
+body.alto-contraste table tbody tr:hover {
+    background-color: #222 !important;
+}
+
+/* Pasos de Compra: 1 - 2 - 3 */
+body.alto-contraste .purchase-step-indicator span {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 3px solid #fff !important;
+    box-shadow: none !important;
+}
+
+body.alto-contraste .purchase-step-indicator.active span {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+}
+
+body.alto-contraste .purchase-step-indicator small {
+    color: #fff !important;
+}
+
+body.alto-contraste .purchase-step-indicator.active small {
+    color: #ffe600 !important;
+}
+
+/* Líneas que unen los pasos */
+body.alto-contraste div[class~="h-1"] {
+    background-color: #fff !important;
+}
+
+/* Círculos de los pasos de Contacto (activo = amarillo) */
+body.alto-contraste div[class*="rounded-full"]:not([class*="text-white"]) {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 3px solid #fff !important;
+}
+
+body.alto-contraste div[class*="rounded-full"][class*="text-white"] {
+    background-color: #ffe600 !important;
+    color: #000 !important;
+    border: 3px solid #fff !important;
+}
