@@ -3,27 +3,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://127.0.0.1:5000/</loc>
+        <loc>https://dev.vallegrande.edu.pe/CUYCONECTA/</loc>
     </url>
 
     <url>
-        <loc>http://127.0.0.1:5000/conoce-matahuasi</loc>
+        <loc>https://dev.vallegrande.edu.pe/CUYCONECTA/nosotros</loc>
     </url>
 
     <url>
-        <loc>http://127.0.0.1:5000/nosotros</loc>
+        <loc>https://dev.vallegrande.edu.pe/CUYCONECTA/conoce-matahuasi</loc>
     </url>
 
     <url>
-        <loc>http://127.0.0.1:5000/datos</loc>
+        <loc>https://dev.vallegrande.edu.pe/CUYCONECTA/productos</loc>
     </url>
 
     <url>
-        <loc>http://127.0.0.1:5000/contactos</loc>
+        <loc>https://dev.vallegrande.edu.pe/CUYCONECTA/contactos</loc>
     </url>
 
     <url>
-        <loc>http://127.0.0.1:5000/productos</loc>
+        <loc>https://dev.vallegrande.edu.pe/CUYCONECTA/compra</loc>
     </url>
 
 </urlset>
