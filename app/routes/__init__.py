@@ -1,6 +1,44 @@
-from flask import Blueprint, Response, render_template, request, redirect, url_for, flash
+import re
+
+from flask import Blueprint, Response, jsonify, render_template, request, redirect, url_for, flash
 from app.db import get_connection
 main_bp = Blueprint("main", __name__)
+
+# Opciones válidas del campo "Motivo de contacto" (iguales al <select> del formulario)
+MOTIVOS_VALIDOS = {
+    "Quiero comprar cuys",
+    "Quiero comprar quinua",
+    "Quiero información sobre los productos",
+    "Quiero ser productor asociado",
+    "Quiero conocer más sobre la cooperativa",
+    "Tengo una consulta",
+    "Otro",
+}
+
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+TELEFONO_RE = re.compile(r"^\+?[0-9 ()-]{6,20}$")
+
+
+def validar_contacto(nombre, correo, telefono, motivo, mensaje):
+    """Valida en el servidor los datos del formulario. Devuelve {campo: error}."""
+    errores = {}
+
+    if not 2 <= len(nombre) <= 150:
+        errores["nombre"] = "El nombre debe tener entre 2 y 150 caracteres."
+
+    if len(correo) > 150 or not EMAIL_RE.match(correo):
+        errores["correo"] = "Ingresa un correo electrónico válido."
+
+    if telefono and not TELEFONO_RE.match(telefono):
+        errores["telefono"] = "Ingresa un teléfono válido (6 a 20 dígitos)."
+
+    if motivo not in MOTIVOS_VALIDOS:
+        errores["motivo"] = "Selecciona un motivo de contacto válido."
+
+    if not 5 <= len(mensaje) <= 500:
+        errores["mensaje"] = "El mensaje debe tener entre 5 y 500 caracteres."
+
+    return errores
 
 
 @main_bp.route("/")
@@ -34,8 +72,9 @@ def contactos():
         motivo = request.form.get("motivo", "").strip()
         mensaje = request.form.get("mensaje", "").strip()
 
-        if not nombre or not correo or not motivo or not mensaje:
-            return "Faltan datos obligatorios", 400
+        errores = validar_contacto(nombre, correo, telefono, motivo, mensaje)
+        if errores:
+            return jsonify(ok=False, errors=errores), 400
 
         conn = None
         cursor = None
@@ -44,31 +83,38 @@ def contactos():
             conn = get_connection()
             cursor = conn.cursor()
 
+            # Consulta parametrizada (evita inyección SQL).
+            # Busca el reason_id a partir del texto del motivo.
+            # NOTA: usa las tablas del script 01_structure.sql (contact / contact_reason).
             sql = """
-                INSERT INTO contactos
-                (nombre, correo, telefono, motivo, mensaje)
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO contact (full_name, email, phone, reason_id, message)
+                SELECT %s, %s, NULLIF(%s, ''), reason_id, %s
+                FROM contact_reason
+                WHERE reason_name = %s
             """
 
-            valores = (
-                nombre,
-                correo,
-                telefono,
-                motivo,
-                mensaje
-            )
+            cursor.execute(sql, (nombre, correo, telefono, mensaje, motivo))
 
-            cursor.execute(sql, valores)
+            if cursor.rowcount == 0:
+                conn.rollback()
+                return jsonify(
+                    ok=False,
+                    errors={"motivo": "El motivo seleccionado no existe."}
+                ), 400
+
             conn.commit()
 
-            return redirect(url_for("main.contactos"))
+            return jsonify(ok=True)
 
         except Exception as e:
             if conn:
                 conn.rollback()
 
             print("ERROR AL GUARDAR CONTACTO:", e)
-            return "Error al guardar el mensaje", 500
+            return jsonify(
+                ok=False,
+                error="No pudimos guardar tu mensaje. Inténtalo más tarde."
+            ), 500
 
         finally:
             if cursor:

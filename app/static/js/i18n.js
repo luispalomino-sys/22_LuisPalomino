@@ -104,6 +104,10 @@ const translations = {
     "contact.option_cooperative": "Quiero conocer más sobre la cooperativa",
     "contact.option_question": "Tengo una consulta",
     "contact.option_other": "Otro",
+    "map.title": "Dónde estamos",
+    "map.iframe_title": "Mapa de Matahuasi, Junín, Perú",
+    "map.open": "Abrir en Google Maps",
+    "whatsapp.label": "Escríbenos por WhatsApp",
 
     // Página: COMPRA / CARRITO
     "buy.hero_title": "Compra",
@@ -277,6 +281,10 @@ const translations = {
     "contact.option_cooperative": "I want to learn more about the cooperative",
     "contact.option_question": "I have a question",
     "contact.option_other": "Other",
+    "map.title": "Where we are",
+    "map.iframe_title": "Map of Matahuasi, Junin, Peru",
+    "map.open": "Open in Google Maps",
+    "whatsapp.label": "Message us on WhatsApp",
 
     // Page: CART / CHECKOUT
     "buy.hero_title": "Checkout",

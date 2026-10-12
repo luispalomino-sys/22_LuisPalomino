@@ -409,6 +409,34 @@ Contactos · Cooperativas Sais Capital Social
     </div>
 
 </section>
+
+<!-- =========================================================
+     MAPA DE UBICACIÓN
+========================================================= -->
+
+<section class="cuy-map-section">
+    <h2 data-i18n="map.title">Dónde estamos</h2>
+    <p data-i18n="contact.subtitle">Estamos ubicados en Matahuasi, provincia de Concepción, Junín.</p>
+
+    <iframe
+        class="cuy-map-frame"
+        title="Mapa de Matahuasi, Junín, Perú"
+        data-i18n-title="map.iframe_title"
+        src="https://www.google.com/maps?q=Matahuasi,+Jun%C3%ADn,+Per%C3%BA&hl=es&z=14&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+    ></iframe>
+
+    <a
+        class="cuy-map-link"
+        href="https://www.google.com/maps/search/?api=1&query=Matahuasi%2C%20Jun%C3%ADn%2C%20Per%C3%BA"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-i18n="map.open"
+    >Abrir en Google Maps</a>
+</section>
+
 <script>
 (() => {
   const $ = id => document.getElementById(id);
@@ -429,6 +457,34 @@ Contactos · Cooperativas Sais Capital Social
 
 let enviando = false;
 
+const LANG = document.documentElement.lang === 'en' ? 'en' : 'es';
+const MSG = {
+    es: {
+        sending: 'Enviando...',
+        sent: 'Mensaje enviado correctamente',
+        fail: 'No se pudo enviar el mensaje.',
+        network: 'No se pudo conectar con el servidor.',
+        session: 'Tu sesión expiró. Recarga la página e inténtalo de nuevo.',
+        nombre: 'Escribe tu nombre completo.',
+        correo: 'Ingresa un correo electrónico válido.',
+        telefono: 'Ingresa un teléfono válido.',
+        motivo: 'Selecciona un motivo de contacto válido.',
+        mensaje: 'El mensaje debe tener entre 5 y 500 caracteres.'
+    },
+    en: {
+        sending: 'Sending...',
+        sent: 'Message sent successfully',
+        fail: 'The message could not be sent.',
+        network: 'Could not connect to the server.',
+        session: 'Your session expired. Reload the page and try again.',
+        nombre: 'Enter your full name.',
+        correo: 'Enter a valid email address.',
+        telefono: 'Enter a valid phone number.',
+        motivo: 'Select a valid contact reason.',
+        mensaje: 'The message must be between 5 and 500 characters.'
+    }
+}[LANG];
+
 f2.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -437,8 +493,15 @@ f2.addEventListener('submit', async e => {
     enviando = true;
 
     const botonEnviar = f2.querySelector('button[type="submit"]');
+    const textoOriginal = botonEnviar.textContent;
     botonEnviar.disabled = true;
-    botonEnviar.textContent = 'Enviando...';
+    botonEnviar.textContent = MSG.sending;
+
+    const restaurarBoton = () => {
+        enviando = false;
+        botonEnviar.disabled = false;
+        botonEnviar.textContent = textoOriginal;
+    };
 
     const datos = new URLSearchParams();
 
@@ -452,25 +515,37 @@ f2.addEventListener('submit', async e => {
         const respuesta = await fetch("{{ url_for('main.contactos') }}", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json",
+                "X-CSRFToken": "{{ csrf_token() }}"
             },
             body: datos
         });
 
-        if (respuesta.ok) {
+        const resultado = await respuesta.json().catch(() => ({}));
+
+        if (respuesta.ok && resultado.ok) {
             f2.classList.add('hidden');
             $('contact-success').classList.remove('hidden');
+            window.cuyToast(MSG.sent, 'success');
         } else {
-            alert("No se pudo enviar el mensaje.");
+            let detalle = MSG.fail;
+
+            if (resultado.errors) {
+                const campo = Object.keys(resultado.errors)[0];
+                detalle = MSG[campo] || resultado.errors[campo];
+            } else if (respuesta.status === 400) {
+                detalle = MSG.session;   // token CSRF vencido
+            }
+
+            window.cuyToast(detalle, 'error', 5000);
+            restaurarBoton();
         }
 
     } catch (error) {
-    console.error("Error:", error);
-    alert("No se pudo conectar con el servidor.");
-
-    enviando = false;
-    botonEnviar.disabled = false;
-    botonEnviar.textContent = 'Enviar mensaje';
+        console.error("Error:", error);
+        window.cuyToast(MSG.network, 'error', 5000);
+        restaurarBoton();
     }
 });
 })();
