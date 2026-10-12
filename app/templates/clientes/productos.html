@@ -454,5 +454,19 @@ Más que un producto, el cuy forma parte del trabajo y la producción de nuestro
  </div>
 </section>
 
-<script src="{{ url_for('static', filename='js/cuy.js') }}" defer></script>
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/cuy-detalle.css') }}"
+>
+
+<script
+    src="{{ url_for('static', filename='js/cuy.js') }}"
+    defer
+></script>
+
+<script
+    src="{{ url_for('static', filename='js/cuy-detalle.js') }}"
+    defer
+></script>
+
 {% endblock %}
