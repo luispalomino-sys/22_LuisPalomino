@@ -1,0 +1,174 @@
+/* ==========================================================
+   TRANSICIÓN ENTRE PESTAÑAS
+   - Salida: el contenido se desvanece y se desenfoca.
+   - Entrada: las secciones (y las tarjetas de las grillas)
+     aparecen en cascada, de abajo hacia arriba, de borroso a nítido.
+   - El header se mantiene fijo, como el "marco" de la página.
+   ========================================================== */
+
+:root {
+    --pt-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --pt-enter-duration: 0.75s;
+    --pt-leave-duration: 0.32s;
+}
+
+
+/* ----------------------------------------------------------
+   KEYFRAMES
+   ---------------------------------------------------------- */
+
+@keyframes ptEnter {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.985);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+}
+
+@keyframes ptEnterSoft {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+}
+
+@keyframes ptLeave {
+    from {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.992);
+        filter: blur(8px);
+    }
+}
+
+
+/* ----------------------------------------------------------
+   ENTRADA: SECCIONES
+   `backwards` mantiene el estado inicial durante el retraso
+   y, al terminar, el elemento vuelve a su estilo normal
+   (así no pisa otras animaciones como .reveal-item).
+   ---------------------------------------------------------- */
+
+main > section:where(:not(.cuy-experience)) {
+    animation: ptEnter var(--pt-enter-duration) var(--pt-ease-out) backwards;
+}
+
+/* El primer bloque (hero/banner) usa menos desenfoque: es muy grande */
+main > section:first-child:where(:not(.cuy-experience)) {
+    animation-name: ptEnterSoft;
+}
+
+main > section:nth-child(1) { animation-delay: 0ms; }
+main > section:nth-child(2) { animation-delay: 110ms; }
+main > section:nth-child(3) { animation-delay: 220ms; }
+main > section:nth-child(4) { animation-delay: 330ms; }
+main > section:nth-child(n + 5) { animation-delay: 420ms; }
+
+
+/* ----------------------------------------------------------
+   ENTRADA: TARJETAS DENTRO DE GRILLAS (efecto escalonado)
+   Se excluyen los elementos que ya tienen su propia
+   animación al hacer scroll.
+   ---------------------------------------------------------- */
+
+main .grid > *:where(:not(.reveal-item, .product-item, .cuy-gallery-item, .rv)) {
+    animation: ptEnterSoft 0.7s var(--pt-ease-out) backwards;
+}
+
+main .grid > *:nth-child(1) { animation-delay: 240ms; }
+main .grid > *:nth-child(2) { animation-delay: 310ms; }
+main .grid > *:nth-child(3) { animation-delay: 380ms; }
+main .grid > *:nth-child(4) { animation-delay: 450ms; }
+main .grid > *:nth-child(5) { animation-delay: 520ms; }
+main .grid > *:nth-child(6) { animation-delay: 590ms; }
+main .grid > *:nth-child(n + 7) { animation-delay: 640ms; }
+
+
+/* ----------------------------------------------------------
+   SALIDA
+   ---------------------------------------------------------- */
+
+html.pt-leaving main {
+    animation: ptLeave var(--pt-leave-duration) ease-in forwards;
+    pointer-events: none;
+}
+
+
+/* ----------------------------------------------------------
+   HEADER FIJO
+   Al navegar entre pestañas, el header NO vuelve a animarse
+   (se mantiene como marco estático). Solo se desactivan las
+   animaciones de entrada, no la del carrito (pulse).
+   ---------------------------------------------------------- */
+
+html.pt-internal header.animate__fadeInDown,
+html.pt-internal header .animate__fadeInLeft,
+html.pt-internal header .animate__fadeInRight,
+html.pt-internal header .animate__fadeIn {
+    animation: none;
+}
+
+
+/* ----------------------------------------------------------
+   INDICADOR DE PESTAÑA ACTIVA (menú de escritorio)
+   ---------------------------------------------------------- */
+
+header nav a[aria-current="page"] {
+    position: relative;
+    color: #a9e6a1;
+}
+
+header nav a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 2px;
+    border-radius: 2px;
+    background: #a9e6a1;
+    transform-origin: left center;
+    animation: ptUnderline 0.5s 0.15s var(--pt-ease-out) backwards;
+}
+
+@keyframes ptUnderline {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+
+/* ----------------------------------------------------------
+   ACCESIBILIDAD: sin movimiento si el usuario lo prefiere
+   ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    main > section,
+    main .grid > *,
+    html.pt-leaving main,
+    header nav a[aria-current="page"]::after {
+        animation: none !important;
+    }
+
+    html.pt-leaving main {
+        opacity: 1;
+    }
+}
