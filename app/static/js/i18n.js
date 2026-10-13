@@ -40,6 +40,12 @@ const translations = {
     "about.val_commitment": "Compromiso",
     "about.val_sustainability": "Sostenibilidad",
     "about.val_quality": "Calidad",
+    "about.impact_title": "Nuestro impacto",
+    "about.impact_desc": "Cifras que reflejan el trabajo organizado de nuestros socios en el Centro del Perú.",
+    "about.impact_families": "Familias socias",
+    "about.impact_hectares": "Hectáreas cultivadas",
+    "about.impact_products": "Productos",
+    "about.impact_years": "Años de trayectoria",
 
     // Página: PRODUCTOS
     "prod.hero_tag": "Productos de nuestros productores",
@@ -217,6 +223,12 @@ const translations = {
     "about.val_commitment": "Commitment",
     "about.val_sustainability": "Sustainability",
     "about.val_quality": "Quality",
+    "about.impact_title": "Our Impact",
+    "about.impact_desc": "Figures that reflect the organized work of our members in Central Peru.",
+    "about.impact_families": "Member families",
+    "about.impact_hectares": "Hectares cultivated",
+    "about.impact_products": "Products",
+    "about.impact_years": "Years of experience",
 
     // Page: PRODUCTS
     "prod.hero_tag": "Products from Our Producers",

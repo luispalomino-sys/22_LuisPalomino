@@ -1,0 +1,234 @@
+/* ==========================================================
+   TRANSICIÓN ENTRE PESTAÑAS  (v2)
+   - SALIDA: el contenido se desvanece rápido; el "marco"
+     (header + fondo) permanece.
+   - ENTRADA: cada título, texto, imagen, tarjeta y botón aparece
+     por separado, en una onda diagonal (arriba-izquierda ->
+     abajo-derecha). El JS asigna a cada elemento su retraso
+     (--pt-d) según su posición en pantalla.
+   - MENÚ: el indicador de la pestaña activa se desliza.
+   ========================================================== */
+
+:root {
+    --pt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --pt-leave-ms: 280ms;
+}
+
+
+/* ----------------------------------------------------------
+   El <main> se oculta hasta que el JS prepara los elementos
+   (evita el parpadeo del contenido antes de animarse).
+   ---------------------------------------------------------- */
+
+html.pt-js:not(.pt-ready) main {
+    opacity: 0;
+}
+
+
+/* ----------------------------------------------------------
+   KEYFRAMES
+   Se usan las propiedades individuales translate/scale para no
+   pisar los `transform` de Tailwind (hover, translate-y-8, etc.)
+   ---------------------------------------------------------- */
+
+@keyframes ptCard {
+    from {
+        opacity: 0;
+        translate: 0 26px;
+        scale: 0.93;
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+        filter: blur(0);
+    }
+}
+
+@keyframes ptText {
+    from {
+        opacity: 0;
+        translate: 0 16px;
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+        filter: blur(0);
+    }
+}
+
+/* Títulos: se "destapan" de abajo hacia arriba */
+@keyframes ptHead {
+    from {
+        opacity: 0;
+        translate: 0 0.55em;
+        clip-path: inset(0 0 100% 0);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+        clip-path: inset(-30% -10% -30% -10%);
+        filter: blur(0);
+    }
+}
+
+/* Fondo de banner: fundido + zoom que se asienta */
+@keyframes ptCover {
+    from { opacity: 0; scale: 1.08; }
+    to   { opacity: 1; scale: 1; }
+}
+
+/* Capa oscura sobre el banner: solo fundido */
+@keyframes ptVeil {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes ptMedia {
+    from {
+        opacity: 0;
+        scale: 1.07;
+        filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+        filter: blur(0);
+    }
+}
+
+
+/* ----------------------------------------------------------
+   APLICACIÓN
+   `backwards`: mantiene el estado inicial durante el retraso y,
+   al terminar, el elemento vuelve a su estilo normal.
+   ---------------------------------------------------------- */
+
+[data-pt] {
+    animation-delay: var(--pt-d, 0ms);
+    animation-timing-function: var(--pt-ease);
+    animation-fill-mode: backwards;
+}
+
+[data-pt="card"]  { animation-name: ptCard;  animation-duration: 800ms; }
+[data-pt="text"]  { animation-name: ptText;  animation-duration: 700ms; }
+[data-pt="head"]  { animation-name: ptHead;  animation-duration: 850ms; }
+[data-pt="media"] { animation-name: ptMedia; animation-duration: 950ms; }
+[data-pt="cover"] { animation-name: ptCover; animation-duration: 1100ms; }
+[data-pt="veil"]  { animation-name: ptVeil;  animation-duration: 900ms; animation-timing-function: ease-out; }
+
+
+/* ----------------------------------------------------------
+   SALIDA
+   ---------------------------------------------------------- */
+
+html.pt-leaving main {
+    opacity: 0;
+    filter: blur(6px);
+    scale: 0.992;
+    pointer-events: none;
+    transition:
+        opacity var(--pt-leave-ms) ease-in,
+        filter var(--pt-leave-ms) ease-in,
+        scale var(--pt-leave-ms) ease-in;
+}
+
+
+/* ----------------------------------------------------------
+   HEADER FIJO
+   Al navegar entre pestañas el header NO se vuelve a animar:
+   es el "marco" estático. (El pulso del carrito se conserva.)
+   ---------------------------------------------------------- */
+
+html.pt-internal header.animate__fadeInDown,
+html.pt-internal header .animate__fadeInLeft,
+html.pt-internal header .animate__fadeInRight,
+html.pt-internal header .animate__fadeIn {
+    animation: none;
+}
+
+
+/* ----------------------------------------------------------
+   MENÚ: pestaña activa + indicador deslizante (escritorio)
+   ---------------------------------------------------------- */
+
+header nav {
+    position: relative;
+}
+
+header nav a[aria-current="page"] {
+    color: #a9e6a1;
+}
+
+.pt-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: #a9e6a1;
+    box-shadow: 0 0 10px rgba(169, 230, 161, 0.55);
+    pointer-events: none;
+    opacity: 0;
+    width: var(--w, 0px);
+    transform: translate(var(--x, 0px), var(--y, 0px));
+}
+
+.pt-indicator.pt-ind-on {
+    opacity: 1;
+}
+
+.pt-indicator.pt-ind-anim {
+    transition:
+        transform 0.6s 0.1s var(--pt-ease),
+        width 0.6s 0.1s var(--pt-ease),
+        opacity 0.3s ease;
+}
+
+
+/* ----------------------------------------------------------
+   ACCESIBILIDAD: sin movimiento si el usuario lo prefiere
+   ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    html.pt-js:not(.pt-ready) main {
+        opacity: 1;
+    }
+
+    [data-pt] {
+        animation: none !important;
+    }
+
+    html.pt-leaving main {
+        transition: none;
+    }
+
+    .pt-indicator.pt-ind-anim {
+        transition: none;
+    }
+}
+
+
+/* ----------------------------------------------------------
+   Contenido bajo el pliegue: espera oculto hasta que aparece
+   en pantalla (entonces el JS le pone data-pt y se anima).
+   ---------------------------------------------------------- */
+
+[data-pt-wait] {
+    opacity: 0;
+}
+
+@media print {
+    [data-pt-wait] {
+        opacity: 1 !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-pt-wait] {
+        opacity: 1;
+    }
+}

@@ -48,6 +48,19 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='css/extras.css') }}"
     >
+
+    <!-- TRANSICIÓN ENTRE PESTAÑAS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/page-transition.css') }}"
+    >
+    <script src="{{ url_for('static', filename='js/page-transition.js') }}"></script>
+
+    <!-- CONTADORES ANIMADOS DE IMPACTO -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/counters.css') }}"
+    >
 </head>
 
 <body class="min-h-screen bg-white text-[#163832]">
@@ -924,6 +937,7 @@
 
 <script src="{{ url_for('static', filename='js/extras.js') }}"></script>
 <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+<script src="{{ url_for('static', filename='js/counters.js') }}"></script>
 
 {% if whatsapp_number %}
 <!-- BOTÓN FLOTANTE DE WHATSAPP -->
