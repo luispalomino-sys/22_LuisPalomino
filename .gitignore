@@ -1,9 +1,12 @@
-﻿mi-proyecto/venv/
+# Python
 __pycache__/
 *.pyc
-.env
-.vscode/
+venv/
 .venv/
-__pycache__/
-*.pyc
+
+# Secretos (usa .env.example como plantilla)
+.env
+
+# Editor / herramientas
+.vscode/
 node_modules/
