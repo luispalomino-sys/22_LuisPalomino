@@ -1,2 +1,6 @@
-flask
-werkzeug
+Flask
+Werkzeug
+Flask-WTF
+python-dotenv
+mysql-connector-python
+gunicorn

@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de administración | CuyConecta</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="admin-body">
+
+    <header class="admin-header">
+        <a href="/" class="brand">
+            Cuy<span>Conecta</span>
+        </a>
+
+        <div class="header-actions">
+            <span class="admin-email">
+                {{ session.get('admin_correo', 'Administrador') }}
+            </span>
+
+            <form method="POST" action="{{ url_for('admin.logout') }}">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <button type="submit" class="btn btn-outline">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+
+        <section class="dashboard-heading">
+            <div>
+                <p class="eyebrow">PANEL PRIVADO</p>
+                <h1>Gestión de contactos</h1>
+
+                <p class="subtitle">
+                    Consulta y administra los mensajes recibidos desde tu página web.
+                </p>
+            </div>
+
+            <div class="counter-card">
+                <span>Contactos encontrados</span>
+                <strong>{{ contactos|length }}</strong>
+            </div>
+        </section>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <div class="flash-container">
+                    {% for categoria, mensaje in mensajes %}
+                        <div class="flash flash-{{ categoria }}">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section class="admin-card">
+
+            <form method="GET"
+                  action="{{ url_for('admin.dashboard') }}"
+                  class="search-form">
+
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ busqueda }}"
+                    placeholder="Buscar por nombre, correo, teléfono o mensaje..."
+                    aria-label="Buscar contactos"
+                >
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+                {% if busqueda %}
+                    <a href="{{ url_for('admin.dashboard') }}"
+                       class="btn btn-outline">
+                        Limpiar
+                    </a>
+                {% endif %}
+            </form>
+
+            {% if contactos %}
+
+                <div class="table-container">
+                    <table class="contacts-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre y correo</th>
+                                <th>Teléfono</th>
+                                <th>Motivo</th>
+                                <th>Mensaje</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for contacto in contactos %}
+                                <tr>
+                                    <td data-label="ID">
+                                        #{{ contacto.id }}
+                                    </td>
+
+                                    <td data-label="Contacto">
+                                        <strong>{{ contacto.nombre }}</strong>
+                                        <a class="contact-email"
+                                           href="mailto:{{ contacto.correo }}">
+                                            {{ contacto.correo }}
+                                        </a>
+                                    </td>
+
+                                    <td data-label="Teléfono">
+                                        {{ contacto.telefono or 'No indicado' }}
+                                    </td>
+
+                                    <td data-label="Motivo">
+                                        <span class="reason-tag">
+                                            {{ contacto.motivo }}
+                                        </span>
+                                    </td>
+
+                                    <td data-label="Mensaje">
+                                        <div class="message-text">
+                                            {{ contacto.mensaje }}
+                                        </div>
+                                    </td>
+
+                                    <td data-label="Fecha">
+                                        {{ contacto.fecha or 'Sin fecha' }}
+                                    </td>
+
+                                    <td data-label="Acciones">
+                                        <div class="action-buttons">
+
+                                            <a
+                                                href="{{ url_for('admin.editar_contacto', contacto_id=contacto.id) }}"
+                                                class="btn btn-small btn-edit">
+                                                Editar
+                                            </a>
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for('admin.eliminar_contacto', contacto_id=contacto.id) }}"
+                                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este contacto? Esta acción no se puede deshacer.');">
+
+                                                <input
+                                                    type="hidden"
+                                                    name="csrf_token"
+                                                    value="{{ csrf_token() }}"
+                                                >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-small btn-delete">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <h2>No se encontraron contactos</h2>
+
+                    {% if busqueda %}
+                        <p>Prueba con otro término de búsqueda.</p>
+                        <a href="{{ url_for('admin.dashboard') }}"
+                           class="btn btn-outline">
+                            Ver todos los contactos
+                        </a>
+                    {% else %}
+                        <p>
+                            Todavía no hay mensajes para mostrar.
+                            Cuando se reciban contactos desde la web, aparecerán aquí.
+                        </p>
+                    {% endif %}
+                </div>
+
+            {% endif %}
+
+        </section>
+
+        <footer class="dashboard-footer">
+            <a href="/">Volver al sitio público</a>
+            <span>© CuyConecta</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>
