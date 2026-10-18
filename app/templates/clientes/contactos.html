@@ -191,7 +191,7 @@ Contactos · Cooperativas Sais Capital Social
             id="contact-form-step-2"
             class="space-y-6 hidden"
         >
-
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div>
 
                 <h2
@@ -402,5 +402,5 @@ Contactos · Cooperativas Sais Capital Social
     </div>
 
 </section>
-
+<script src="{{ url_for('static', filename='js/contact-form.js') }}"></script>
 {% endblock %}
