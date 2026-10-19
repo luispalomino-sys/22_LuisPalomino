@@ -955,3 +955,21 @@
 
 </body>
 </html>
+
+<nav ...>
+    <a href="/">Inicio</a>
+    <a href="/clientes">Clientes</a>
+    ... tus otros enlaces ...
+
+    {% if session.get("usuario_id") %}
+        <span class="text-xs hidden sm:inline">
+            {{ session.get("usuario_nombre") }}
+        </span>
+        <a href="{{ url_for('login.logout') }}"
+           class="bg-gray-900 hover:bg-gray-800 text-white font-medium px-3 py-1.5 rounded-lg">
+            Cerrar sesión
+        </a>
+    {% else %}
+        <a href="/login">Login</a>
+    {% endif %}
+</nav>

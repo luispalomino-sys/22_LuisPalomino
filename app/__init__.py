@@ -41,6 +41,9 @@ def create_app():
         return {"whatsapp_number": numero}
 
     from app.routes import main_bp
+    from app.routes.login import login_bp
+
     app.register_blueprint(main_bp)
+    app.register_blueprint(login_bp)
 
     return app
