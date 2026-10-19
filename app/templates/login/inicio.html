@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-700">
+  <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="font-medium text-gray-900">Inicio</a>
+      <div class="flex items-center gap-4 text-sm">
+        <span class="text-gray-500">{{ session.get("usuario_nombre") }}</span>
+        <a href="{{ url_for('login.logout') }}"
+           class="bg-gray-900 hover:bg-gray-800 text-white font-medium px-3 py-1.5 rounded-lg transition-colors">
+          Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="text-center py-24 px-4">
+    <h1 class="text-4xl font-semibold text-gray-900">Bienvenido al sistema</h1>
+    <p class="text-gray-500 mt-3">Has iniciado sesión correctamente</p>
+  </main>
+</body>
+</html>

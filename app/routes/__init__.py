@@ -83,9 +83,6 @@ def contactos():
             conn = get_connection()
             cursor = conn.cursor()
 
-            # Consulta parametrizada (evita inyección SQL).
-            # Busca el reason_id a partir del texto del motivo.
-            # NOTA: usa las tablas del script 01_structure.sql (contact / contact_reason).
             sql = """
                 INSERT INTO contact (full_name, email, phone, reason_id, message)
                 SELECT %s, %s, NULLIF(%s, ''), reason_id, %s
@@ -129,10 +126,10 @@ def contactos():
 @main_bp.route("/compra")
 def compra():
     return render_template("clientes/compra.html")
+
+
 @main_bp.route("/sitemap.xml")
 def sitemap():
-    # Páginas públicas que deben aparecer en Google.
-    # Para agregar una página nueva, añade aquí el nombre de su función.
     paginas = [
         "main.inicio",
         "main.nosotros",
