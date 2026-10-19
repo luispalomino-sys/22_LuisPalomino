@@ -1,6 +1,12 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 class Config:
-    DB_HOST = "mysql-1a9ac3d4-proyectoflask.i.aivencloud.com"
-    DB_PORT = 10412
-    DB_USER = "avnadmin"
-    DB_PASSWORD = "AVNS_IYqz2tqlKyVqp9imQu_"
-    DB_NAME = "defaultdb"
+    DB_HOST = os.getenv("DB_HOST")
+    DB_PORT = int(os.getenv("DB_PORT", "3306"))
+    DB_USER = os.getenv("DB_USER")
+    DB_PASSWORD = os.getenv("DB_PASSWORD")
+    DB_NAME = os.getenv("DB_NAME", "defaultdb")

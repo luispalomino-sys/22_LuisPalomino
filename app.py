@@ -18,8 +18,8 @@ if __name__ == "__main__":
         conexion = obtener_conexion()
         print("Conexión a la base de datos exitosa")
         conexion.close()
-    except:
-        print("Fallo en la conexión a la base de datos")
+    except Exception as e:
+        print("Fallo en la conexión a la base de datos:", e)
 
     port = int(os.environ.get("PORT", 5000))
     app.run(
