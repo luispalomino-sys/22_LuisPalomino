@@ -12,6 +12,10 @@ const translations = {
     "nav.products": "Productos",
     "nav.buy": "Compra",
     "nav.menu": "Menú",
+    "cart.view_products": "Ver productos",
+    "cuyexp.tag": "🐹 Experiencia interactiva",
+    "cuyexp.title": "Conoce nuestro Cuy",
+    "cuyexp.desc": "Más que un producto, el cuy forma parte del trabajo y la producción de nuestros socios. Explora algunas características y descubre un dato diferente cada vez.",
     "footer.title": "Cooperativa Agraria\nProductores Agropecuarios\ndel Centro del Perú",
 
     // Hero / Inicio
@@ -36,6 +40,12 @@ const translations = {
     "about.val_commitment": "Compromiso",
     "about.val_sustainability": "Sostenibilidad",
     "about.val_quality": "Calidad",
+    "about.impact_title": "Nuestro impacto",
+    "about.impact_desc": "Cifras que reflejan el trabajo organizado de nuestros socios en el Centro del Perú.",
+    "about.impact_families": "Familias socias",
+    "about.impact_hectares": "Hectáreas cultivadas",
+    "about.impact_products": "Productos",
+    "about.impact_years": "Años de trayectoria",
 
     // Página: PRODUCTOS
     "prod.hero_tag": "Productos de nuestros productores",
@@ -100,6 +110,10 @@ const translations = {
     "contact.option_cooperative": "Quiero conocer más sobre la cooperativa",
     "contact.option_question": "Tengo una consulta",
     "contact.option_other": "Otro",
+    "map.title": "Dónde estamos",
+    "map.iframe_title": "Mapa de Matahuasi, Junín, Perú",
+    "map.open": "Abrir en Google Maps",
+    "whatsapp.label": "Escríbenos por WhatsApp",
 
     // Página: COMPRA / CARRITO
     "buy.hero_title": "Compra",
@@ -152,7 +166,7 @@ const translations = {
 
     // Mini Carrito
     "cart.title": "Tu carrito",
-    "cart.empty": "🛒\nTu carrito está vacío.",
+    "cart.empty": "Tu carrito está vacío.",
     "cart.subtotal": "Subtotal",
     "cart.checkout": "Ir a comprar",
     "cart.remove": "Quitar",
@@ -177,7 +191,15 @@ const translations = {
     "nav.products": "Products",
     "nav.buy": "Cart",
     "nav.menu": "Menu",
+        "cart.view_products": "View products",
+        "cuyexp.tag": "🐹 Interactive experience",
+    "cuyexp.title": "Get to know our Guinea Pig",
+    "cuyexp.desc": "More than a product, the guinea pig is part of the work and production of our members. Explore some features and discover a different fact each time.",
     "footer.title": "Agricultural Cooperative\nAgricultural Producers\nof Central Peru",
+    "footer.brand1": "Cooperativa Agraria",
+    "footer.brand2": "Productores Agropecuarios",
+    "footer.brand3": "del Centro del Perú",
+    "footer.copyright": "© 2026 Cooperativa Agraria Productores Agropecuarios del Centro del Perú",
 
     // Hero / Home
     "hero.subtitle": "Cooperativas Sais",
@@ -201,6 +223,12 @@ const translations = {
     "about.val_commitment": "Commitment",
     "about.val_sustainability": "Sustainability",
     "about.val_quality": "Quality",
+    "about.impact_title": "Our Impact",
+    "about.impact_desc": "Figures that reflect the organized work of our members in Central Peru.",
+    "about.impact_families": "Member families",
+    "about.impact_hectares": "Hectares cultivated",
+    "about.impact_products": "Products",
+    "about.impact_years": "Years of experience",
 
     // Page: PRODUCTS
     "prod.hero_tag": "Products from Our Producers",
@@ -265,6 +293,10 @@ const translations = {
     "contact.option_cooperative": "I want to learn more about the cooperative",
     "contact.option_question": "I have a question",
     "contact.option_other": "Other",
+    "map.title": "Where we are",
+    "map.iframe_title": "Map of Matahuasi, Junin, Peru",
+    "map.open": "Open in Google Maps",
+    "whatsapp.label": "Message us on WhatsApp",
 
     // Page: CART / CHECKOUT
     "buy.hero_title": "Checkout",
@@ -395,6 +427,23 @@ function setLanguage(lang) {
   });
 
 
+    /* Traducir aria-label y title */
+
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria");
+
+    if (translations[lang][key]) {
+      el.setAttribute("aria-label", translations[lang][key]);
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+
+    if (translations[lang][key]) {
+      el.setAttribute("title", translations[lang][key]);
+    }
+  });
   /* --------------------------------------------------------
      Actualizar botón de idioma
      

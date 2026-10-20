@@ -1,0 +1,162 @@
+/* ==========================================================
+   CONTADORES ANIMADOS DE IMPACTO  (feature/sp8-US3_Counters)
+   Sección "Nuestro impacto" en la página Nosotros.
+   ========================================================== */
+
+.impact-section {
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 1.5rem;
+    background: linear-gradient(135deg, #063f35 0%, #0b5a4b 100%);
+    color: #ffffff;
+}
+
+/* círculos decorativos de fondo */
+.impact-section::before,
+.impact-section::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(169, 230, 161, 0.08);
+    pointer-events: none;
+}
+.impact-section::before { width: 320px; height: 320px; top: -140px; left: -100px; }
+.impact-section::after  { width: 260px; height: 260px; bottom: -120px; right: -80px; }
+
+.impact-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 72rem;
+    margin: 0 auto;
+}
+
+.impact-title {
+    margin: 0 0 .75rem;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+}
+
+.impact-subtitle {
+    max-width: 38rem;
+    margin: 0 auto 2.75rem;
+    text-align: center;
+    color: rgba(255, 255, 255, .78);
+    line-height: 1.6;
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .impact-section { padding: 5rem 2.5rem; }
+    .impact-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+}
+
+.impact-card {
+    position: relative;
+    padding: 1.75rem 1rem 1.5rem;
+    text-align: center;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .14);
+    backdrop-filter: blur(4px);
+    transition: transform .3s ease, background .3s ease;
+}
+.impact-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, .13);
+}
+
+/* Estado previo a la animación (solo si hay JS) */
+.js-counters .impact-card {
+    opacity: 0;
+    transform: translateY(28px) scale(.96);
+}
+.js-counters .impact-card.is-visible {
+    opacity: 1;
+    transform: none;
+    transition:
+        opacity .6s ease var(--ic-delay, 0ms),
+        transform .6s cubic-bezier(.2, .8, .2, 1) var(--ic-delay, 0ms),
+        background .3s ease;
+}
+.js-counters .impact-card.is-visible:hover {
+    transform: translateY(-6px);
+    transition-delay: 0ms;
+}
+
+.impact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    border-radius: 50%;
+    background: rgba(169, 230, 161, .18);
+}
+.is-visible .impact-icon { animation: impact-pop .7s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: var(--ic-delay, 0ms); }
+
+@keyframes impact-pop {
+    0%   { transform: scale(0) rotate(-25deg); }
+    100% { transform: scale(1) rotate(0); }
+}
+
+.impact-number {
+    display: block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #a9e6a1;
+    font-variant-numeric: tabular-nums;   /* los dígitos no "bailan" al contar */
+}
+.impact-number.is-done { animation: impact-bump .45s ease; }
+
+@keyframes impact-bump {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.12); }
+}
+
+.impact-label {
+    margin-top: .5rem;
+    font-size: .95rem;
+    color: rgba(255, 255, 255, .85);
+}
+
+/* barra que se llena bajo cada número */
+.impact-bar {
+    height: 3px;
+    margin: 1rem auto 0;
+    width: 60%;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .15);
+    overflow: hidden;
+}
+.impact-bar::after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: #a9e6a1;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+.is-visible .impact-bar::after {
+    transform: scaleX(1);
+    transition: transform 2s cubic-bezier(.2, .7, .2, 1) var(--ic-delay, 0ms);
+}
+
+/* Accesibilidad: sin movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .js-counters .impact-card,
+    .js-counters .impact-card.is-visible { opacity: 1; transform: none; transition: none; }
+    .is-visible .impact-icon,
+    .impact-number.is-done { animation: none; }
+    .impact-bar::after { transform: scaleX(1); transition: none; }
+}

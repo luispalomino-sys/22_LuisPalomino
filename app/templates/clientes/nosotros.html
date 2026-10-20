@@ -36,7 +36,7 @@ Nosotros · Cooperativas Sais Capital Social
  </p>
  </div>
  <div class="rounded-[30px] overflow-hidden shadow-lg h-[240px]">
- <img src="{{ url_for('static', filename='img/19.jpg') }}" alt="Productores trabajando" class="w-full h-full object-cover">
+ <img loading="lazy" decoding="async" src="{{ url_for('static', filename='img/19.jpg') }}" alt="Productores trabajando" class="w-full h-full object-cover">
  </div>
  </div>
  </div>
@@ -67,6 +67,43 @@ Nosotros · Cooperativas Sais Capital Social
  </p>
  </article>
  </div>
+</section>
+
+<!-- NUESTRO IMPACTO (contadores animados) -->
+<section class="impact-section" data-impact data-pt-skip>
+    <div class="impact-inner">
+        <h2 class="impact-title" data-i18n="about.impact_title">Nuestro impacto</h2>
+        <p class="impact-subtitle" data-i18n="about.impact_desc">
+            Cifras que reflejan el trabajo organizado de nuestros socios en el Centro del Perú.
+        </p>
+
+        <div class="impact-grid">
+            <article class="impact-card" data-pt-skip>
+                <div class="impact-icon" aria-hidden="true">👨‍🌾</div>
+                <span class="impact-number" data-count="120" data-suffix="+">120+</span>
+                <p class="impact-label" data-i18n="about.impact_families">Familias socias</p>
+                <div class="impact-bar"></div>
+            </article>
+            <article class="impact-card" data-pt-skip>
+                <div class="impact-icon" aria-hidden="true">🌾</div>
+                <span class="impact-number" data-count="850" data-suffix="+">850+</span>
+                <p class="impact-label" data-i18n="about.impact_hectares">Hectáreas cultivadas</p>
+                <div class="impact-bar"></div>
+            </article>
+            <article class="impact-card" data-pt-skip>
+                <div class="impact-icon" aria-hidden="true">🥔</div>
+                <span class="impact-number" data-count="15" data-suffix="+">15+</span>
+                <p class="impact-label" data-i18n="about.impact_products">Productos</p>
+                <div class="impact-bar"></div>
+            </article>
+            <article class="impact-card" data-pt-skip>
+                <div class="impact-icon" aria-hidden="true">📅</div>
+                <span class="impact-number" data-count="25" data-suffix="">25</span>
+                <p class="impact-label" data-i18n="about.impact_years">Años de trayectoria</p>
+                <div class="impact-bar"></div>
+            </article>
+        </div>
+    </div>
 </section>
 
 <!-- VALORES -->

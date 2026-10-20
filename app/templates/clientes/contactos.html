@@ -402,5 +402,32 @@ Contactos · Cooperativas Sais Capital Social
     </div>
 
 </section>
+<!-- =========================================================
+     MAPA DE UBICACIÓN
+========================================================= -->
+
+<section class="cuy-map-section">
+    <h2 data-i18n="map.title">Dónde estamos</h2>
+    <p data-i18n="contact.subtitle">Estamos ubicados en Matahuasi, provincia de Concepción, Junín.</p>
+
+    <iframe
+        class="cuy-map-frame"
+        title="Mapa de Matahuasi, Junín, Perú"
+        data-i18n-title="map.iframe_title"
+        src="https://www.google.com/maps?q=Matahuasi,+Jun%C3%ADn,+Per%C3%BA&hl=es&z=14&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+    ></iframe>
+
+    <a
+        class="cuy-map-link"
+        href="https://www.google.com/maps/search/?api=1&query=Matahuasi%2C%20Jun%C3%ADn%2C%20Per%C3%BA"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-i18n="map.open"
+    >Abrir en Google Maps</a>
+</section>
+
 <script src="{{ url_for('static', filename='js/contact-form.js') }}"></script>
 {% endblock %}
